@@ -1,7 +1,7 @@
 import { Color, ColorStop } from "./types";
 import { sortBy } from "lodash";
 
-function cleanGradient(stops: readonly ColorStop[]): ColorStop[] {
+export function cleanGradient(stops: readonly ColorStop[]): ColorStop[] {
   return sortBy(stops, (cp) => cp.position);
 }
 
