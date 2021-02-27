@@ -22,7 +22,7 @@ function findStops(stops: readonly ColorStop[], position: number) {
 
 function interpolate(
   stops: readonly ColorStop[],
-  position: number
+  position: number,
 ): Color | null {
   if (stops.length === 0) return null;
   const [stop1, stop2] = findStops(stops, position);
@@ -42,7 +42,7 @@ function interpolate(
 
 export function renderGradient(
   ctx: CanvasRenderingContext2D,
-  stops: readonly ColorStop[]
+  stops: readonly ColorStop[],
 ) {
   ctx.canvas.width = 0 | ctx.canvas.width;
   // can't be 1 px height because drawImage does interpolation (at least on Chrome)
@@ -72,13 +72,13 @@ export function renderGradient(
     0,
     0,
     imageData.width,
-    ctx.canvas.height
+    ctx.canvas.height,
   );
 }
 
 export function sample(
   stops: readonly ColorStop[],
-  position: number
+  position: number,
 ): Color | null {
   const cleanedStops = cleanGradient(stops);
   return interpolate(cleanedStops, position);

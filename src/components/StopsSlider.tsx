@@ -33,7 +33,7 @@ export function StopsSlider({
         csApi.select(stopId);
       }
     },
-    [csApi]
+    [csApi],
   );
   const onMouseUp = React.useCallback(() => {
     setMovingId(null);
@@ -47,7 +47,7 @@ export function StopsSlider({
       const value = getX(event, sliderBody);
       csApi.changePartial(movingId, { position: value });
     },
-    [movingId, csApi]
+    [movingId, csApi],
   );
   useEvent("mouseup", movingId ? onMouseUp : null, window, { capture: true });
   useEvent("mousemove", movingId ? onMouseMove : null, window, {
@@ -78,7 +78,7 @@ export function StopsSlider({
         csApi.select(id);
       }
     },
-    [csApi, colorStops]
+    [csApi, colorStops],
   );
   return (
     <div
@@ -94,7 +94,7 @@ export function StopsSlider({
           style={{
             position: "absolute",
             left: `${stop.position * 100}%`,
-            transform: `translateX(-50%)`,
+            transform: `translateX(-50%) translateY(-5px)`,
             background: toCssRgba(stop.color),
             color: toCssRgba(invertColor(stop.color)),
             cursor: "move",
@@ -102,6 +102,7 @@ export function StopsSlider({
             width: "5ch",
             textAlign: "center",
             border: "1px solid black",
+            borderRadius: "3px",
             borderColor: selectedStopId === stop.id ? "black" : "transparent",
             fontSize: "8pt",
           }}

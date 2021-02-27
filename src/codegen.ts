@@ -4,6 +4,8 @@ import { format } from "prettier";
 import parser from "prettier/parser-babel";
 import { minify } from "terser";
 
+interface CodegenConfig {}
+
 function formatColorReturn({ r, g, b, a }: Color): string {
   let rf = formatColorNum(r);
   let gf = formatColorNum(g);
@@ -27,9 +29,17 @@ function formatLerpComponent(a: number, b: number): string {
   return `${formatColorNum(a)} * beta + ${formatColorNum(b)} * alpha`;
 }
 
-export async function generateCode(
-  stops: readonly ColorStop[]
-): Promise<string> {
+function formatCode(minifiedCode: string) {
+  return format(minifiedCode, {
+    parser: parser.parsers["babel"].parse,
+    printWidth: 120,
+  });
+}
+
+export function generateRawCode(
+  stops: readonly ColorStop[],
+  config: CodegenConfig,
+) {
   const cleanedStops = cleanGradient(stops);
   const codeBits: string[] = [];
   const write = codeBits.push.bind(codeBits);
@@ -39,7 +49,7 @@ export async function generateCode(
     const stop = cleanedStops[i];
     const nextStop = i < cleanedStops.length - 1 ? cleanedStops[i + 1] : null;
     const colorFmt = formatColorReturn(stop.color);
-    let posFmt = formatPosition(stop.position);
+    const posFmt = formatPosition(stop.position);
     if (i === 0) {
       write(`if(position <= ${posFmt}) return ${colorFmt};`);
     } else if (i === cleanedStops.length - 1) {
@@ -50,7 +60,7 @@ export async function generateCode(
       write(`{`);
       let width = formatPosition(nextStop.position - stop.position);
       write(
-        `const beta = (position - ${posFmt}) / ${width}, alpha = 1 - beta;`
+        `const beta = (position - ${posFmt}) / ${width}, alpha = 1 - beta;`,
       );
       write(`return [
       ${formatLerpComponent(stop.color.r, nextStop.color.r)},
@@ -64,10 +74,15 @@ export async function generateCode(
 
   write("}");
 
-  const code = codeBits.join("");
-  const minifiedCode = (await minify(code, { mangle: false })).code || "";
-  return format(minifiedCode, {
-    parser: parser.parsers["babel"].parse,
-    printWidth: 120,
-  });
+  return formatCode(codeBits.join(""));
+}
+
+export async function generateCode(
+  stops: readonly ColorStop[],
+  config: CodegenConfig,
+): Promise<string> {
+  const code = generateRawCode(stops, config);
+  const minifyResult = await minify(code, { mangle: false });
+  const minifiedCode = minifyResult.code || "";
+  return formatCode(minifiedCode);
 }

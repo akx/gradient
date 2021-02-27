@@ -13,7 +13,7 @@ export function invertColor(color: Color): Color {
 
 export function modifyHSL(
   color: Color,
-  mod: Partial<Record<"h" | "s" | "l", number>>
+  mod: Partial<Record<"h" | "s" | "l", number>>,
 ): Color {
   const colorAsHsl = culori.converter("hsl")({ mode: "rgb", ...color });
   Object.assign(colorAsHsl, mod);

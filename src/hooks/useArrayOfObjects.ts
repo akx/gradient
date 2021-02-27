@@ -39,7 +39,7 @@ export interface ArrayOfObjectsAPI<T extends HasId> {
 }
 
 export function useArrayOfObjects<T extends HasId>(
-  initial: () => T[]
+  initial: () => T[],
 ): ArrayOfObjectsAPI<T> {
   const [objects, dispatch] = React.useReducer<
     Reducer<T[], AooAction<T>>,
@@ -51,25 +51,25 @@ export function useArrayOfObjects<T extends HasId>(
     (value: T) => {
       dispatch({ type: "add", value });
     },
-    [dispatch]
+    [dispatch],
   );
   const change = React.useCallback(
     (value: T) => {
       dispatch({ type: "change", value });
     },
-    [dispatch]
+    [dispatch],
   );
   const changePartial = React.useCallback(
     (id: string, changes: Partial<T>) => {
       dispatch({ type: "changePartial", id, changes });
     },
-    [dispatch]
+    [dispatch],
   );
   const del = React.useCallback(
     (id: string) => {
       dispatch({ type: "delete", id });
     },
-    [dispatch]
+    [dispatch],
   );
 
   return {

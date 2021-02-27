@@ -5,7 +5,7 @@ import { ArrayOfObjectsAPI } from "../hooks/useArrayOfObjects";
 export type ColorStopsAPI = ArrayOfObjectsAPI<ColorStop>;
 
 const ColorStopsAPIContext = React.createContext<ColorStopsAPI>(
-  {} as ColorStopsAPI
+  {} as ColorStopsAPI,
 );
 
 export default ColorStopsAPIContext;

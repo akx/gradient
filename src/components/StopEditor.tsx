@@ -62,7 +62,7 @@ export function StopEditor({ stop }: StopEditorProps) {
       }
       csApi.change(newStop);
     },
-    [csApi, stop]
+    [csApi, stop],
   );
   const colorAsHsl = culori.converter("hsl")({ mode: "rgb", ...stop.color });
   return (
