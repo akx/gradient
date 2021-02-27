@@ -66,7 +66,7 @@ export function generateRawCode(
       write(`{`);
       let width = formatPosition(nextStop.position - stop.position);
       write(
-        `const beta = (position - ${posFmt}) / ${width}, alpha = 1 - beta;`,
+        `const alpha = (position - ${posFmt}) / ${width}, beta = 1 - alpha;`,
       );
       write(`return [
       ${formatLerpComponent(stop.color.r, nextStop.color.r)},
