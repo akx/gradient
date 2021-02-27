@@ -1,5 +1,5 @@
 import { ColorStop } from "../types";
-import { invertColor, toCssRgba } from "../utils";
+import { invertColor, toCssRgb, toCssRgba } from "../utils";
 import React from "react";
 import { useEvent } from "react-use";
 import { sample } from "../gradients";
@@ -108,7 +108,7 @@ export function StopsSlider({
             left: `${stop.position * 100}%`,
             transform: `translateX(-50%) translateY(-5px)`,
             background: toCssRgba(stop.color),
-            color: toCssRgba(invertColor(stop.color)),
+            color: toCssRgb(invertColor(stop.color)),
             cursor: "move",
             userSelect: "none",
             width: "5ch",
