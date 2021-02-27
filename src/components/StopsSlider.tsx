@@ -30,6 +30,7 @@ export function StopsSlider({
       const stopId = (event.target as HTMLElement).dataset.stopid;
       if (stopId) {
         setMovingId(stopId);
+        csApi.select(stopId);
       }
     },
     []
