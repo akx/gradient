@@ -4,6 +4,7 @@ import { format } from "prettier";
 import parser from "prettier/parser-babel";
 import { minify } from "terser";
 import { JsCodegenConfig } from "./types";
+import { formatNumber } from "./utils";
 
 function formatColorReturn(
   { r, g, b, a }: Color,
@@ -18,10 +19,6 @@ function formatColorReturn(
     return `[${rf},${gf},${bf},${af}]`;
   }
   return `[${rf},${gf},${bf}]`;
-}
-
-function formatNumber(val: number, precision: number): string {
-  return val === Math.round(val) ? val.toFixed(0) : val.toFixed(precision);
 }
 
 function formatABMultiplication(

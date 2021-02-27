@@ -1,10 +1,20 @@
 import { Color } from "./types";
 import * as culori from "culori";
+import { formatNumber } from "./codegen/utils";
 
 export function toCssRgba(color: Color): string {
-  return `rgba(${color.r * 255}, ${color.g * 255}, ${color.b * 255}, ${
-    color.a * 100
-  }%)`;
+  const ri = Math.round(color.r * 255);
+  const gi = Math.round(color.g * 255);
+  const bi = Math.round(color.b * 255);
+  const ar = formatNumber(color.a * 100, 2);
+  return `rgba(${ri}, ${gi}, ${bi}, ${ar}%)`;
+}
+
+export function toCssRgb(color: Color): string {
+  const ri = Math.round(color.r * 255);
+  const gi = Math.round(color.g * 255);
+  const bi = Math.round(color.b * 255);
+  return `rgb(${ri}, ${gi}, ${bi})`;
 }
 
 export function invertColor(color: Color): Color {
