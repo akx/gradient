@@ -2,6 +2,8 @@
   "name": "gradient",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://akx.github.io/gradient/",
   "dependencies": {
     "@chakra-ui/react": "^1.3.3",
     "@emotion/react": "^11.1.5",

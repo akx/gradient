@@ -33,7 +33,7 @@ export function StopsSlider({
         csApi.select(stopId);
       }
     },
-    []
+    [csApi]
   );
   const onMouseUp = React.useCallback(() => {
     setMovingId(null);
