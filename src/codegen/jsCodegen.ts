@@ -1,15 +1,9 @@
-import { CodegenConfig, Color, ColorStop } from "./types";
-import { cleanGradient } from "./gradients";
+import { Color, ColorStop } from "../types";
+import { cleanGradient } from "../gradients";
 import { format } from "prettier";
 import parser from "prettier/parser-babel";
 import { minify } from "terser";
-
-export const defaultConfig: CodegenConfig = {
-  arrowFunction: false,
-  includeAlpha: true,
-  positionPrecision: 3,
-  valuePrecision: 4,
-};
+import { JsCodegenConfig } from "./types";
 
 function formatColorReturn(
   { r, g, b, a }: Color,
@@ -58,7 +52,7 @@ function formatCode(minifiedCode: string) {
 
 export function generateRawCode(
   stops: readonly ColorStop[],
-  config: CodegenConfig,
+  config: JsCodegenConfig,
 ) {
   const cleanedStops = cleanGradient(stops);
   const codeBits: string[] = [];
@@ -92,12 +86,12 @@ export function generateRawCode(
       );
       write(`{`);
       let width = nextStop.position - stop.position;
-      const widthFmt = formatNumber(width, config.positionPrecision);
+      const iWidthFmt = formatNumber(1 / width, config.positionPrecision);
 
       if (stop.position === 0) {
-        write(`const a = position / ${widthFmt}, b = 1 - a;`);
+        write(`const a = position * ${iWidthFmt}, b = 1 - a;`);
       } else {
-        write(`const a = (position - ${posFmt}) / ${widthFmt}, b = 1 - a;`);
+        write(`const a = (position - ${posFmt}) * ${iWidthFmt}, b = 1 - a;`);
       }
       const components = [
         formatLerpComponent(
@@ -137,7 +131,7 @@ export function generateRawCode(
 
 export async function generateCode(
   stops: readonly ColorStop[],
-  config: CodegenConfig,
+  config: JsCodegenConfig,
 ): Promise<string> {
   const code = generateRawCode(stops, config);
   const minifyResult = await minify(code, { mangle: false });

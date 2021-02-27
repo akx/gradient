@@ -14,10 +14,3 @@ export interface ColorStop {
 export interface GradientConfig {
   interpolationColorspace: "linear";
 }
-
-export interface CodegenConfig {
-  arrowFunction: boolean;
-  includeAlpha: boolean;
-  positionPrecision: number;
-  valuePrecision: number;
-}
