@@ -1,5 +1,6 @@
 import { Color, ColorStop } from "./types";
 import { sortBy } from "lodash";
+import { generateRawCode, GetColor } from "./codegen";
 
 export function cleanGradient(stops: readonly ColorStop[]): ColorStop[] {
   return sortBy(stops, (cp) => cp.position);
@@ -47,19 +48,19 @@ export function renderGradient(
   ctx.canvas.width = 0 | ctx.canvas.width;
   // can't be 1 px height because drawImage does interpolation (at least on Chrome)
   const imageData = new ImageData(ctx.canvas.width, 4);
-  const cleanedStops = cleanGradient(stops);
+  // eslint-disable-next-line no-eval
+  const getColor: GetColor = eval(
+    generateRawCode(stops, { arrowFunction: true }),
+  );
   for (let x = 0; x < imageData.width; x++) {
     const i = x / (imageData.width - 1);
-    const color = interpolate(cleanedStops, i);
-    if (color === null) {
-      break;
-    }
+    const [r, g, b, a] = getColor(i);
     for (let y = 0; y < imageData.height; y++) {
       const offset = (y * imageData.width + x) * 4;
-      imageData.data[offset] = Math.round(color.r * 255);
-      imageData.data[offset + 1] = Math.round(color.g * 255);
-      imageData.data[offset + 2] = Math.round(color.b * 255);
-      imageData.data[offset + 3] = Math.round(color.a * 255);
+      imageData.data[offset] = Math.round(r * 255);
+      imageData.data[offset + 1] = Math.round(g * 255);
+      imageData.data[offset + 2] = Math.round(b * 255);
+      imageData.data[offset + 3] = Math.round(a * 255);
     }
   }
   ctx.putImageData(imageData, 0, 0);

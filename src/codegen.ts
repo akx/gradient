@@ -4,7 +4,9 @@ import { format } from "prettier";
 import parser from "prettier/parser-babel";
 import { minify } from "terser";
 
-interface CodegenConfig {}
+interface CodegenConfig {
+  arrowFunction?: boolean;
+}
 
 function formatColorReturn({ r, g, b, a }: Color): string {
   let rf = formatColorNum(r);
@@ -43,7 +45,11 @@ export function generateRawCode(
   const cleanedStops = cleanGradient(stops);
   const codeBits: string[] = [];
   const write = codeBits.push.bind(codeBits);
-  write("function getColor(position) {");
+  if (config.arrowFunction) {
+    write("(position) => {");
+  } else {
+    write("function getColor(position) {");
+  }
 
   for (let i = 0; i < cleanedStops.length; i++) {
     const stop = cleanedStops[i];
@@ -86,3 +92,5 @@ export async function generateCode(
   const minifiedCode = minifyResult.code || "";
   return formatCode(minifiedCode);
 }
+
+export type GetColor = (i: number) => [number, number, number, number];
