@@ -10,7 +10,7 @@ export function generateCssGradientStops(
 ) {
   const cleanedStops = cleanGradient(stops);
   const includeAlpha =
-    config.includeAlpha && cleanedStops.some((s) => s.color.a != 1);
+    config.includeAlpha && cleanedStops.some((s) => s.color.a !== 1);
 
   const cssStops: string[] = [];
 
