@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/gradient/static/js/main.ccd6f955.chunk.js",
+    "main.js": "/gradient/static/js/main.dba5fada.chunk.js",
     "runtime-main.js": "/gradient/static/js/runtime-main.42762d90.js",
-    "static/js/2.2e4a80ef.chunk.js": "/gradient/static/js/2.2e4a80ef.chunk.js",
+    "static/js/2.fd6a038c.chunk.js": "/gradient/static/js/2.fd6a038c.chunk.js",
     "index.html": "/gradient/index.html",
-    "static/js/2.2e4a80ef.chunk.js.LICENSE.txt": "/gradient/static/js/2.2e4a80ef.chunk.js.LICENSE.txt"
+    "static/js/2.fd6a038c.chunk.js.LICENSE.txt": "/gradient/static/js/2.fd6a038c.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.42762d90.js",
-    "static/js/2.2e4a80ef.chunk.js",
-    "static/js/main.ccd6f955.chunk.js"
+    "static/js/2.fd6a038c.chunk.js",
+    "static/js/main.dba5fada.chunk.js"
   ]
 }
