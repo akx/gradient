@@ -1,20 +1,10 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Container,
-} from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import React from "react";
 import { ColorStop } from "./types";
-import { StopsSlider } from "./components/StopsSlider";
-import { StopEditor } from "./components/StopEditor";
 import { useArrayOfObjects } from "./hooks/useArrayOfObjects";
 import ColorStopsAPIContext from "./contexts/ColorStopsAPIContext";
-import { GradientCanvas } from "./components/GradientCanvas";
-import { GradientCode } from "./components/GradientCode";
+import { MainAccordion } from "./components/MainAccordion";
+import { MainToolbar } from "./components/MainToolbar";
 
 function getInitialGradient() {
   return [
@@ -26,45 +16,11 @@ function getInitialGradient() {
 
 function App() {
   const colorStopsAPI = useArrayOfObjects<ColorStop>(getInitialGradient);
-  const { objects: colorStops, selectedId } = colorStopsAPI;
-
-  const selectedStop = colorStops.find((s) => s.id === selectedId);
   return (
     <Container maxW="container.xl">
       <ColorStopsAPIContext.Provider value={colorStopsAPI}>
-        <Accordion defaultIndex={[0, 1]} allowMultiple reduceMotion>
-          <AccordionItem>
-            <h2>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  Editor
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              <GradientCanvas colorStops={colorStops} />
-              <StopsSlider
-                colorStops={colorStops}
-                selectedStopId={selectedId}
-              />
-              {selectedStop ? <StopEditor stop={selectedStop} /> : null}
-            </AccordionPanel>
-          </AccordionItem>
-          <AccordionItem>
-            <h2>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  Code
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              <GradientCode colorStops={colorStops} />
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+        <MainToolbar />
+        <MainAccordion />
       </ColorStopsAPIContext.Provider>
     </Container>
   );

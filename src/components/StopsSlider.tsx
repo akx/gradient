@@ -2,8 +2,8 @@ import { ColorStop } from "../types";
 import { invertColor, toCssRgba } from "../utils";
 import React from "react";
 import { useEvent } from "react-use";
-import ColorStopsAPIContext from "../contexts/ColorStopsAPIContext";
 import { sample } from "../gradients";
+import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 
 function getX(event: Event | React.MouseEvent, sliderBody: HTMLDivElement) {
   const x = (event as MouseEvent).clientX;
@@ -21,7 +21,7 @@ export function StopsSlider({
   colorStops: readonly ColorStop[];
   selectedStopId: string | null;
 }) {
-  const csApi = React.useContext(ColorStopsAPIContext);
+  const csApi = useColorStopsAPI();
   const [movingId, setMovingId] = React.useState<string | null>(null);
   const sliderBodyRef = React.useRef<HTMLDivElement>(null);
 
@@ -61,7 +61,13 @@ export function StopsSlider({
         csApi.select(stopId);
         event.stopPropagation();
         event.preventDefault();
-      } else if (event.target === sliderBodyRef.current) {
+      }
+    },
+    [csApi],
+  );
+  const handleDoubleClick = React.useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      if (event.target === sliderBodyRef.current) {
         const position = getX(event, sliderBodyRef.current);
         const sampledColor = sample(colorStops, position) || {
           r: 1,
@@ -82,9 +88,15 @@ export function StopsSlider({
   );
   return (
     <div
-      style={{ position: "relative", height: "1em", background: "cornsilk" }}
+      style={{
+        position: "relative",
+        height: "1em",
+        background: "cornsilk",
+        userSelect: "none",
+      }}
       onMouseDown={onMouseDown}
       onClick={handleClick}
+      onDoubleClick={handleDoubleClick}
       ref={sliderBodyRef}
     >
       {colorStops.map((stop) => (

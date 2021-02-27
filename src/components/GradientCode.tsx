@@ -1,27 +1,27 @@
 import React from "react";
 import { ColorStop } from "../types";
 import {
-  Tab,
-  TabList,
-  Tabs,
-  Textarea,
-  TabPanel,
-  TabPanels,
   Button,
   ButtonGroup,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Textarea,
 } from "@chakra-ui/react";
 import { generateCode } from "../codegen/jsCodegen";
 import { defaultConfig, defaultJsConfig } from "../codegen/defaults";
 import { generateCssGradientStops } from "../codegen/cssCodegen";
 import { exportState, importState } from "../export";
-import ColorStopsAPIContext from "../contexts/ColorStopsAPIContext";
+import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 
 export function GradientCode({
   colorStops,
 }: {
   colorStops: readonly ColorStop[];
 }) {
-  const csApi = React.useContext(ColorStopsAPIContext);
+  const csApi = useColorStopsAPI();
   const [js, setJS] = React.useState("");
   const [exportData, setExportData] = React.useState("");
   React.useEffect(() => {

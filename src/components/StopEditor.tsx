@@ -13,10 +13,10 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { ColorStop } from "../types";
-import ColorStopsAPIContext from "../contexts/ColorStopsAPIContext";
 import * as culori from "culori";
 import { modifyHSL } from "../utils";
 import { ColorComponentSlider } from "./ColorComponentSlider";
+import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 
 type StopEditorProps = {
   stop: ColorStop;
@@ -32,7 +32,7 @@ const formatComponentHelp = (value: number) => {
 };
 
 export function StopEditor({ stop }: StopEditorProps) {
-  const csApi = React.useContext(ColorStopsAPIContext);
+  const csApi = useColorStopsAPI();
   const onChangeComponent = React.useCallback(
     (eventKey: string, value: number) => {
       const newStop = { ...stop };
