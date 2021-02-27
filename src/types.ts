@@ -18,4 +18,6 @@ export interface GradientConfig {
 export interface CodegenConfig {
   arrowFunction: boolean;
   includeAlpha: boolean;
+  positionPrecision: number;
+  valuePrecision: number;
 }

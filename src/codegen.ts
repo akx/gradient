@@ -4,30 +4,49 @@ import { format } from "prettier";
 import parser from "prettier/parser-babel";
 import { minify } from "terser";
 
-function formatColorReturn({ r, g, b, a }: Color, withAlpha: boolean): string {
-  let rf = formatColorNum(r);
-  let gf = formatColorNum(g);
-  let bf = formatColorNum(b);
-  let af = formatColorNum(a);
+export const defaultConfig: CodegenConfig = {
+  arrowFunction: false,
+  includeAlpha: true,
+  positionPrecision: 3,
+  valuePrecision: 4,
+};
+
+function formatColorReturn(
+  { r, g, b, a }: Color,
+  withAlpha: boolean,
+  precision: number,
+): string {
+  let rf = formatNumber(r, precision);
+  let gf = formatNumber(g, precision);
+  let bf = formatNumber(b, precision);
   if (withAlpha) {
+    let af = formatNumber(a, precision);
     return `[${rf},${gf},${bf},${af}]`;
   }
   return `[${rf},${gf},${bf}]`;
 }
 
-function formatPosition(val: number): string {
-  if (val === Math.round(val)) return val.toFixed(0);
-  return val.toFixed(3);
+function formatNumber(val: number, precision: number): string {
+  return val === Math.round(val) ? val.toFixed(0) : val.toFixed(precision);
 }
 
-function formatColorNum(val: number): string {
-  if (val === Math.round(val)) return val.toFixed(0);
-  return val.toFixed(4);
+function formatABMultiplication(
+  n: number,
+  precision: number,
+  multiplier: string,
+): string {
+  if (n === 0) return "0";
+  if (n === 1) return multiplier;
+  return `${formatNumber(n, precision)} * ${multiplier}`;
 }
 
-function formatLerpComponent(a: number, b: number): string {
-  if (Math.abs(a - b) < 0.001) return formatColorNum(a);
-  return `${formatColorNum(a)} * beta + ${formatColorNum(b)} * alpha`;
+function formatLerpComponent(a: number, b: number, precision: number): string {
+  if (Math.abs(a - b) < 0.001) return formatNumber(a, precision);
+  const aMul = formatABMultiplication(a, precision, "b");
+  const bMul = formatABMultiplication(b, precision, "a");
+  if (a === 0) return bMul;
+  if (b === 0) return aMul;
+  return `${aMul} + ${bMul}`;
 }
 
 function formatCode(minifiedCode: string) {
@@ -53,29 +72,60 @@ export function generateRawCode(
   for (let i = 0; i < cleanedStops.length; i++) {
     const stop = cleanedStops[i];
     const nextStop = i < cleanedStops.length - 1 ? cleanedStops[i + 1] : null;
-    const colorFmt = formatColorReturn(stop.color, config.includeAlpha);
-    const posFmt = formatPosition(stop.position);
-    if (i === 0) {
+    const colorFmt = formatColorReturn(
+      stop.color,
+      config.includeAlpha,
+      config.valuePrecision,
+    );
+    const posFmt = formatNumber(stop.position, config.positionPrecision);
+    if (i === 0 && stop.position > 0) {
       write(`if(position <= ${posFmt}) return ${colorFmt};`);
     } else if (i === cleanedStops.length - 1) {
       write(`return ${colorFmt};`);
     }
     if (nextStop) {
-      write(`if(position < ${formatPosition(nextStop.position)})`);
-      write(`{`);
-      let width = formatPosition(nextStop.position - stop.position);
       write(
-        `const alpha = (position - ${posFmt}) / ${width}, beta = 1 - alpha;`,
+        `if(position < ${formatNumber(
+          nextStop.position,
+          config.positionPrecision,
+        )})`,
       );
+      write(`{`);
+      let width = nextStop.position - stop.position;
+      const widthFmt = formatNumber(width, config.positionPrecision);
+
+      if (stop.position === 0) {
+        write(`const a = position / ${widthFmt}, b = 1 - a;`);
+      } else {
+        write(`const a = (position - ${posFmt}) / ${widthFmt}, b = 1 - a;`);
+      }
       const components = [
-        formatLerpComponent(stop.color.r, nextStop.color.r),
-        formatLerpComponent(stop.color.g, nextStop.color.g),
-        formatLerpComponent(stop.color.b, nextStop.color.b),
+        formatLerpComponent(
+          stop.color.r,
+          nextStop.color.r,
+          config.valuePrecision,
+        ),
+        formatLerpComponent(
+          stop.color.g,
+          nextStop.color.g,
+          config.valuePrecision,
+        ),
+        formatLerpComponent(
+          stop.color.b,
+          nextStop.color.b,
+          config.valuePrecision,
+        ),
       ];
       if (config.includeAlpha) {
-        components.push(formatLerpComponent(stop.color.a, nextStop.color.a));
+        components.push(
+          formatLerpComponent(
+            stop.color.a,
+            nextStop.color.a,
+            config.valuePrecision,
+          ),
+        );
+        write(`return [${components.join(",")}];`);
       }
-      write(`return [${components.join(",")}];`);
       write(`}`);
     }
   }

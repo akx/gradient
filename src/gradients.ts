@@ -1,6 +1,6 @@
 import { Color, ColorStop } from "./types";
 import { sortBy } from "lodash";
-import { generateRawCode, GetColor } from "./codegen";
+import { defaultConfig, generateRawCode, GetColor } from "./codegen";
 
 export function cleanGradient(stops: readonly ColorStop[]): ColorStop[] {
   return sortBy(stops, (cp) => cp.position);
@@ -50,7 +50,7 @@ export function renderGradient(
   const imageData = new ImageData(ctx.canvas.width, 4);
   // eslint-disable-next-line no-eval
   const getColor: GetColor = eval(
-    generateRawCode(stops, { arrowFunction: true, includeAlpha: true }),
+    generateRawCode(stops, { ...defaultConfig, arrowFunction: true }),
   );
   for (let x = 0; x < imageData.width; x++) {
     const i = x / (imageData.width - 1);
