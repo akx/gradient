@@ -2,6 +2,7 @@ import React, { Reducer } from "react";
 
 type AooAction<T extends HasId> =
   | { type: "add"; value: T }
+  | { type: "replace"; newObjects: T[] }
   | { type: "change"; value: T }
   | { type: "changePartial"; id: string; changes: Partial<T> }
   | { type: "delete"; id: string };
@@ -9,6 +10,8 @@ type HasId = { id: string };
 
 function aooReducer<T extends HasId>(state: T[], action: AooAction<T>) {
   switch (action.type) {
+    case "replace":
+      return [...action.newObjects];
     case "add":
       // TODO: check for duplicate ids?
       return state.concat([action.value]);
@@ -36,6 +39,7 @@ export interface ArrayOfObjectsAPI<T extends HasId> {
   changePartial: (id: string, newNode: Partial<T>) => void;
   delete: (id: string) => void;
   select: (id: string | null) => void;
+  replace: (newObjects: T[]) => void;
 }
 
 export function useArrayOfObjects<T extends HasId>(
@@ -71,6 +75,12 @@ export function useArrayOfObjects<T extends HasId>(
     },
     [dispatch],
   );
+  const replace = React.useCallback(
+    (newObjects: T[]) => {
+      dispatch({ type: "replace", newObjects });
+    },
+    [dispatch],
+  );
 
   return {
     objects,
@@ -80,5 +90,6 @@ export function useArrayOfObjects<T extends HasId>(
     add,
     delete: del,
     select: setSelectedId,
+    replace,
   };
 }
