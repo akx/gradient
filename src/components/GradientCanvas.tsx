@@ -1,6 +1,7 @@
 import { ColorStop } from "../types";
 import React from "react";
 import { renderGradient } from "../gradients";
+import background from "../graphy.png";
 
 export function GradientCanvas({
   colorStops,
@@ -23,7 +24,7 @@ export function GradientCanvas({
       ref={canvasRef}
       width={1200}
       height={150}
-      style={{ width: "100%" }}
+      style={{ width: "100%", background: `url(${background})` }}
     />
   );
 }

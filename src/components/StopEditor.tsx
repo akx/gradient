@@ -47,6 +47,9 @@ export function StopEditor({ stop }: StopEditorProps) {
         case "blue":
           newStop.color = { ...color, b: value };
           break;
+        case "alpha":
+          newStop.color = { ...color, a: value };
+          break;
         case "hue":
           newStop.color = modifyHSL(color, { h: value });
           break;
@@ -78,7 +81,7 @@ export function StopEditor({ stop }: StopEditorProps) {
         </Slider>
         <FormHelperText>{(stop.position * 100).toFixed(2)}%</FormHelperText>
       </FormControl>
-      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      <Grid templateColumns="repeat(4, 1fr)" gap={6}>
         <Box>
           <ColorComponentSlider
             label="Red"
@@ -112,6 +115,18 @@ export function StopEditor({ stop }: StopEditorProps) {
             min={0}
             max={1}
             colorScheme="blue"
+            formatHelp={formatComponentHelp}
+          />
+        </Box>
+        <Box>
+          <ColorComponentSlider
+            label="Alpha"
+            eventKey="alpha"
+            onChange={onChangeComponent}
+            value={stop.color.a}
+            min={0}
+            max={1}
+            colorScheme="blackAlpha"
             formatHelp={formatComponentHelp}
           />
         </Box>
