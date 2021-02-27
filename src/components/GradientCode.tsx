@@ -10,7 +10,9 @@ export function GradientCode({
 }) {
   const [code, setCode] = React.useState("");
   React.useEffect(() => {
-    generateCode(colorStops, {}).then(setCode);
+    generateCode(colorStops, { arrowFunction: false, includeAlpha: true }).then(
+      setCode,
+    );
   }, [colorStops]);
   return <Textarea readOnly value={code} rows={15} />;
 }

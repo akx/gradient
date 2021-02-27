@@ -50,7 +50,7 @@ export function renderGradient(
   const imageData = new ImageData(ctx.canvas.width, 4);
   // eslint-disable-next-line no-eval
   const getColor: GetColor = eval(
-    generateRawCode(stops, { arrowFunction: true }),
+    generateRawCode(stops, { arrowFunction: true, includeAlpha: true }),
   );
   for (let x = 0; x < imageData.width; x++) {
     const i = x / (imageData.width - 1);

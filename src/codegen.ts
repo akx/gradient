@@ -1,19 +1,18 @@
-import { Color, ColorStop } from "./types";
+import { CodegenConfig, Color, ColorStop } from "./types";
 import { cleanGradient } from "./gradients";
 import { format } from "prettier";
 import parser from "prettier/parser-babel";
 import { minify } from "terser";
 
-interface CodegenConfig {
-  arrowFunction?: boolean;
-}
-
-function formatColorReturn({ r, g, b, a }: Color): string {
+function formatColorReturn({ r, g, b, a }: Color, withAlpha: boolean): string {
   let rf = formatColorNum(r);
   let gf = formatColorNum(g);
   let bf = formatColorNum(b);
   let af = formatColorNum(a);
-  return `[${rf},${gf},${bf},${af}]`;
+  if (withAlpha) {
+    return `[${rf},${gf},${bf},${af}]`;
+  }
+  return `[${rf},${gf},${bf}]`;
 }
 
 function formatPosition(val: number): string {
@@ -54,7 +53,7 @@ export function generateRawCode(
   for (let i = 0; i < cleanedStops.length; i++) {
     const stop = cleanedStops[i];
     const nextStop = i < cleanedStops.length - 1 ? cleanedStops[i + 1] : null;
-    const colorFmt = formatColorReturn(stop.color);
+    const colorFmt = formatColorReturn(stop.color, config.includeAlpha);
     const posFmt = formatPosition(stop.position);
     if (i === 0) {
       write(`if(position <= ${posFmt}) return ${colorFmt};`);
@@ -68,12 +67,15 @@ export function generateRawCode(
       write(
         `const alpha = (position - ${posFmt}) / ${width}, beta = 1 - alpha;`,
       );
-      write(`return [
-      ${formatLerpComponent(stop.color.r, nextStop.color.r)},
-      ${formatLerpComponent(stop.color.g, nextStop.color.g)},
-      ${formatLerpComponent(stop.color.b, nextStop.color.b)},
-      ${formatLerpComponent(stop.color.a, nextStop.color.a)},
-      ];`);
+      const components = [
+        formatLerpComponent(stop.color.r, nextStop.color.r),
+        formatLerpComponent(stop.color.g, nextStop.color.g),
+        formatLerpComponent(stop.color.b, nextStop.color.b),
+      ];
+      if (config.includeAlpha) {
+        components.push(formatLerpComponent(stop.color.a, nextStop.color.a));
+      }
+      write(`return [${components.join(",")}];`);
       write(`}`);
     }
   }

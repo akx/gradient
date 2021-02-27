@@ -10,3 +10,12 @@ export interface ColorStop {
   position: number;
   color: Color;
 }
+
+export interface GradientConfig {
+  interpolationColorspace: "linear";
+}
+
+export interface CodegenConfig {
+  arrowFunction: boolean;
+  includeAlpha: boolean;
+}
