@@ -2,8 +2,8 @@ import { ColorStop } from "../types";
 import { invertColor, toCssRgb, toCssRgba } from "../utils";
 import React from "react";
 import { useEvent } from "react-use";
-import { sample } from "../gradients";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
+import { sample } from "../gradients/basic";
 
 function getX(event: Event | React.MouseEvent, sliderBody: HTMLDivElement) {
   const x = (event as MouseEvent).clientX;

@@ -1,9 +1,9 @@
 import { ColorStop } from "../types";
 import React from "react";
-import { renderGradient } from "../gradients";
 import background from "../graphy.png";
 import { useCodegenConfig } from "../hooks/useCodegenConfig";
 import { defaultJsConfig } from "../codegen/defaults";
+import { renderGradient } from "../gradients/render";
 
 export function GradientCanvas({
   colorStops,

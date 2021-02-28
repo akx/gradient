@@ -1,8 +1,8 @@
 import { ColorStop } from "../types";
-import { cleanGradient } from "../gradients";
 import { CodegenConfig } from "./types";
 import { clamp, toCssRgb, toCssRgba } from "../utils";
 import { formatNumber } from "./utils";
+import { cleanGradient } from "../gradients/utils";
 
 export function generateCssGradientStops(
   stops: readonly ColorStop[],

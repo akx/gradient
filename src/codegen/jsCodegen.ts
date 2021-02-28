@@ -1,10 +1,10 @@
 import { Color, ColorStop } from "../types";
-import { cleanGradient } from "../gradients";
 import { format } from "prettier";
 import parser from "prettier/parser-babel";
 import { minify } from "terser";
 import { JsCodegenConfig } from "./types";
 import { formatNumber } from "./utils";
+import { cleanGradient } from "../gradients/utils";
 
 function formatColorReturn(
   { r, g, b, a }: Color,

@@ -1,6 +1,6 @@
 import { ColorStop } from "./types";
-import { cleanGradient } from "./gradients";
 import * as z from "zod";
+import { cleanGradient } from "./gradients/utils";
 
 const stateSchema = z.array(
   z.object({

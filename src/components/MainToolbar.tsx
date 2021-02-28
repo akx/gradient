@@ -10,7 +10,7 @@ import { HelpModal } from "./HelpModal";
 import React from "react";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 import { getRandomGradient } from "../examplePalettes";
-import { cleanGradient } from "../gradients";
+import { cleanGradient } from "../gradients/utils";
 
 export function MainToolbar() {
   const helpDisco = useDisclosure();
