@@ -10,7 +10,7 @@ import { HelpModal } from "./HelpModal";
 import React from "react";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 import { getRandomGradient } from "../examplePalettes";
-import { cleanGradient } from "../gradients/utils";
+import { reverseColorStops } from "../gradients/utils";
 
 export function MainToolbar() {
   const helpDisco = useDisclosure();
@@ -19,11 +19,7 @@ export function MainToolbar() {
     csApi.replace(getRandomGradient());
   }, [csApi]);
   const reversePalette = React.useCallback(() => {
-    csApi.replace(
-      cleanGradient(
-        csApi.objects.map((s) => ({ ...s, position: 1 - s.position })),
-      ),
-    );
+    csApi.replace(reverseColorStops(csApi.objects));
   }, [csApi]);
   return (
     <>

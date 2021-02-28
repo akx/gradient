@@ -1,10 +1,11 @@
-import { ColorStop } from "../types";
+import { ColorStop, GradientConfig } from "../types";
 import { JsCodegenConfig } from "../codegen/types";
 import { generateRawCode, GetColor } from "../codegen/jsCodegen";
 
 export function renderGradient(
   ctx: CanvasRenderingContext2D,
   stops: readonly ColorStop[],
+  gradientConfig: GradientConfig,
   jsCodegenConfig: JsCodegenConfig,
 ) {
   ctx.canvas.width = 0 | ctx.canvas.width;
@@ -12,7 +13,10 @@ export function renderGradient(
   const imageData = new ImageData(ctx.canvas.width, 4);
   // eslint-disable-next-line no-eval
   const getColor: GetColor = eval(
-    generateRawCode(stops, { ...jsCodegenConfig, arrowFunction: true }),
+    generateRawCode(stops, gradientConfig, {
+      ...jsCodegenConfig,
+      arrowFunction: true,
+    }),
   );
   const { width, height } = imageData;
   for (let x = 0; x < width; x++) {

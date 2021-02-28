@@ -1,5 +1,5 @@
 import { Color, ColorStop } from "../types";
-import { cleanGradient } from "./utils";
+import { sortStops } from "./utils";
 
 function findStops(stops: readonly ColorStop[], position: number) {
   const firstStop = stops[0];
@@ -40,6 +40,7 @@ export function sample(
   stops: readonly ColorStop[],
   position: number,
 ): Color | null {
-  const cleanedStops = cleanGradient(stops);
+  // TODO: this is wrong when interpolation isn't linear...
+  const cleanedStops = sortStops(stops);
   return interpolate(cleanedStops, position);
 }

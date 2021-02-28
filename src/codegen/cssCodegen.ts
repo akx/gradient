@@ -1,16 +1,17 @@
-import { ColorStop } from "../types";
+import { ColorStop, GradientConfig } from "../types";
 import { CodegenConfig } from "./types";
 import { clamp, toCssRgb, toCssRgba } from "../utils";
 import { formatNumber } from "./utils";
-import { cleanGradient } from "../gradients/utils";
+import { mangleGradient } from "../gradients/mangle";
 
 export function generateCssGradientStops(
   stops: readonly ColorStop[],
-  config: CodegenConfig,
+  gradientConfig: GradientConfig,
+  codegenConfig: CodegenConfig,
 ) {
-  const cleanedStops = cleanGradient(stops);
+  const cleanedStops = mangleGradient(stops, gradientConfig);
   const includeAlpha =
-    config.includeAlpha && cleanedStops.some((s) => s.color.a !== 1);
+    codegenConfig.includeAlpha && cleanedStops.some((s) => s.color.a !== 1);
 
   const cssStops: string[] = [];
 
@@ -22,7 +23,7 @@ export function generateCssGradientStops(
       : toCssRgb(stop.color);
     const posFmt = formatNumber(
       stop.position * 100,
-      clamp(config.positionPrecision - 2, 0, 10),
+      clamp(codegenConfig.positionPrecision - 2, 0, 10),
     );
     cssStops.push(`${cssColor} ${posFmt}%`);
   }

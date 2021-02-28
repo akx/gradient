@@ -1,6 +1,6 @@
 import { Container } from "@chakra-ui/react";
 import React from "react";
-import { ColorStop } from "./types";
+import { ColorStop, GradientConfig, InterpolationType } from "./types";
 import { useArrayOfObjects } from "./hooks/useArrayOfObjects";
 import ColorStopsAPIContext from "./contexts/ColorStopsAPIContext";
 import { MainAccordion } from "./components/MainAccordion";
@@ -10,23 +10,35 @@ import { useObject } from "./hooks/useObject";
 import { CodegenConfig } from "./codegen/types";
 import { defaultConfig } from "./codegen/defaults";
 import CodegenConfigContext from "./contexts/CodegenConfigContext";
+import GradientConfigContext from "./contexts/GradientConfigContext";
 
 function getInitialGradient() {
   return getRandomGradient(0.1);
 }
+
 function getInitialCodegenConfig() {
   return { ...defaultConfig };
+}
+
+function getInitialGradientConfig(): GradientConfig {
+  return {
+    interpolation: InterpolationType.Linear,
+    interpolationPoints: 10,
+  };
 }
 
 function App() {
   const colorStopsAPI = useArrayOfObjects<ColorStop>(getInitialGradient);
   const codegenConfigAPI = useObject<CodegenConfig>(getInitialCodegenConfig);
+  const gradientConfigAPI = useObject<GradientConfig>(getInitialGradientConfig);
   return (
     <Container maxW="container.xl">
       <ColorStopsAPIContext.Provider value={colorStopsAPI}>
         <CodegenConfigContext.Provider value={codegenConfigAPI}>
-          <MainToolbar />
-          <MainAccordion />
+          <GradientConfigContext.Provider value={gradientConfigAPI}>
+            <MainToolbar />
+            <MainAccordion />
+          </GradientConfigContext.Provider>
         </CodegenConfigContext.Provider>
       </ColorStopsAPIContext.Provider>
     </Container>

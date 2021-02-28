@@ -1,6 +1,6 @@
 import { ColorStop } from "./types";
 import * as z from "zod";
-import { cleanGradient } from "./gradients/utils";
+import { sortStops } from "./gradients/utils";
 
 const stateSchema = z.array(
   z.object({
@@ -19,7 +19,7 @@ const stateSchema = z.array(
 
 export function exportState(colorStops: readonly ColorStop[]): string {
   return JSON.stringify(
-    cleanGradient(colorStops).map((stop) => {
+    sortStops(colorStops).map((stop) => {
       const c: Record<string, any> = { ...stop };
       delete c.id;
       return c;

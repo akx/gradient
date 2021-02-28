@@ -33,7 +33,7 @@ const formatComponentHelp = (value: number) => {
   );
 };
 
-export function StopEditor({ stop }: StopEditorProps) {
+function StopEditor({ stop }: StopEditorProps) {
   const csApi = useColorStopsAPI();
   const onChangeComponent = React.useCallback(
     (eventKey: string, value: number) => {
@@ -198,3 +198,4 @@ export function StopEditor({ stop }: StopEditorProps) {
     </Box>
   );
 }
+export default StopEditor;

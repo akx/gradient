@@ -14,7 +14,7 @@ function getX(event: Event | React.MouseEvent, sliderBody: HTMLDivElement) {
   return value;
 }
 
-export function StopsSlider({
+function StopsSlider({
   colorStops,
   selectedStopId,
 }: {
@@ -125,3 +125,4 @@ export function StopsSlider({
     </div>
   );
 }
+export default StopsSlider;

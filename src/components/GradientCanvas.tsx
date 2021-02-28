@@ -4,13 +4,11 @@ import background from "../graphy.png";
 import { useCodegenConfig } from "../hooks/useCodegenConfig";
 import { defaultJsConfig } from "../codegen/defaults";
 import { renderGradient } from "../gradients/render";
+import { useGradientConfig } from "../hooks/useGradientConfig";
 
-export function GradientCanvas({
-  colorStops,
-}: {
-  colorStops: readonly ColorStop[];
-}) {
+function GradientCanvas({ colorStops }: { colorStops: readonly ColorStop[] }) {
   const codegenConfig = useCodegenConfig().object;
+  const gradientConfig = useGradientConfig().object;
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   React.useEffect(() => {
     const canvas = canvasRef.current;
@@ -19,12 +17,12 @@ export function GradientCanvas({
     }
     const context = canvas.getContext("2d");
     if (context) {
-      renderGradient(context, colorStops, {
+      renderGradient(context, colorStops, gradientConfig, {
         ...defaultJsConfig,
         ...codegenConfig,
       });
     }
-  }, [colorStops, codegenConfig]);
+  }, [colorStops, codegenConfig, gradientConfig]);
   return (
     <canvas
       ref={canvasRef}
@@ -34,3 +32,5 @@ export function GradientCanvas({
     />
   );
 }
+
+export default GradientCanvas;

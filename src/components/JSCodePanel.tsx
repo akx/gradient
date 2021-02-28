@@ -6,22 +6,26 @@ import { generateCode } from "../codegen/jsCodegen";
 import { defaultJsConfig } from "../codegen/defaults";
 import { Box, Flex, Textarea } from "@chakra-ui/react";
 import CodegenSettings from "./CodegenSettings";
+import { useGradientConfig } from "../hooks/useGradientConfig";
 
 export default function GradientJSCodePanel() {
   const csApi = useColorStopsAPI();
+  const gcApi = useGradientConfig();
   const ccApi = useCodegenConfig();
   const { objects: colorStops } = csApi;
   const { object: codegenConfig } = ccApi;
+  const { object: gradientConfig } = gcApi;
   const [js, setJS] = React.useState("");
 
   useDebounce(
     () => {
-      generateCode(colorStops, { ...defaultJsConfig, ...codegenConfig }).then(
-        setJS,
-      );
+      generateCode(colorStops, gradientConfig, {
+        ...defaultJsConfig,
+        ...codegenConfig,
+      }).then(setJS);
     },
     100,
-    [codegenConfig, colorStops],
+    [gradientConfig, codegenConfig, colorStops],
   );
   return (
     <Flex>

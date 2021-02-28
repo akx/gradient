@@ -7,11 +7,23 @@ import {
   AccordionPanel,
   Box,
 } from "@chakra-ui/react";
-import { GradientCanvas } from "./GradientCanvas";
-import { StopsSlider } from "./StopsSlider";
-import { StopEditor } from "./StopEditor";
-import { GradientCode } from "./GradientCode";
+import GradientCanvas from "./GradientCanvas";
+import StopsSlider from "./StopsSlider";
+import StopEditor from "./StopEditor";
+import GradientCode from "./GradientCode";
 import React from "react";
+import GradientConfigPanel from "./GradientConfigPanel";
+
+const AccordionHeader: React.FC = ({ children }) => (
+  <h2>
+    <AccordionButton>
+      <Box flex="1" textAlign="left">
+        {children}
+      </Box>
+      <AccordionIcon />
+    </AccordionButton>
+  </h2>
+);
 
 export function MainAccordion() {
   const { objects: colorStops, selectedId } = useColorStopsAPI();
@@ -19,14 +31,7 @@ export function MainAccordion() {
   return (
     <Accordion defaultIndex={[0, 1]} allowMultiple reduceMotion>
       <AccordionItem>
-        <h2>
-          <AccordionButton>
-            <Box flex="1" textAlign="left">
-              Editor
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-        </h2>
+        <AccordionHeader>Editor</AccordionHeader>
         <AccordionPanel pb={4}>
           <GradientCanvas colorStops={colorStops} />
           <StopsSlider colorStops={colorStops} selectedStopId={selectedId} />
@@ -34,14 +39,13 @@ export function MainAccordion() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <h2>
-          <AccordionButton>
-            <Box flex="1" textAlign="left">
-              Code
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-        </h2>
+        <AccordionHeader>Configuration</AccordionHeader>
+        <AccordionPanel pb={4}>
+          <GradientConfigPanel />
+        </AccordionPanel>
+      </AccordionItem>
+      <AccordionItem>
+        <AccordionHeader>Code</AccordionHeader>
         <AccordionPanel pb={4}>
           <GradientCode />
         </AccordionPanel>

@@ -4,7 +4,7 @@ import GradientJSCodePanel from "./JSCodePanel";
 import GradientCSSCodePanel from "./CSSCodePanel";
 import ImportExportPanel from "./ImportExportPanel";
 
-export function GradientCode() {
+function GradientCode() {
   return (
     <Tabs flex={1} isLazy>
       <TabList>
@@ -26,3 +26,5 @@ export function GradientCode() {
     </Tabs>
   );
 }
+
+export default GradientCode;

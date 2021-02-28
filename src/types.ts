@@ -11,6 +11,12 @@ export interface ColorStop {
   color: Color;
 }
 
+export enum InterpolationType {
+  Linear = "Linear",
+  CatmullRom = "CatmullRom",
+}
+
 export interface GradientConfig {
-  interpolationColorspace: "linear";
+  interpolation: InterpolationType;
+  interpolationPoints: number;
 }

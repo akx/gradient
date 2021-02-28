@@ -1,10 +1,10 @@
-import { Color, ColorStop } from "../types";
+import { Color, ColorStop, GradientConfig } from "../types";
 import { format } from "prettier";
 import parser from "prettier/parser-babel";
 import { minify } from "terser";
 import { JsCodegenConfig } from "./types";
 import { formatNumber } from "./utils";
-import { cleanGradient } from "../gradients/utils";
+import { mangleGradient } from "../gradients/mangle";
 
 function formatColorReturn(
   { r, g, b, a }: Color,
@@ -49,9 +49,10 @@ function formatCode(minifiedCode: string) {
 
 export function generateRawCode(
   stops: readonly ColorStop[],
+  gradientConfig: GradientConfig,
   config: JsCodegenConfig,
 ) {
-  const cleanedStops = cleanGradient(stops);
+  const cleanedStops = mangleGradient(stops, gradientConfig);
   const codeBits: string[] = [];
   const write = codeBits.push.bind(codeBits);
   if (config.arrowFunction) {
@@ -131,9 +132,12 @@ export function generateRawCode(
 
 export async function generateCode(
   stops: readonly ColorStop[],
-  config: JsCodegenConfig,
+  gradientConfig: GradientConfig,
+  codegenConfig: JsCodegenConfig,
 ): Promise<string> {
-  const code = formatCode(generateRawCode(stops, config));
+  const code = formatCode(
+    generateRawCode(stops, gradientConfig, codegenConfig),
+  );
   const minifyResult = await minify(code, { mangle: false });
   const minifiedCode = minifyResult.code || "";
   return formatCode(minifiedCode);
