@@ -31,3 +31,7 @@ export function modifyHSL(
 
   return { ...color, r: colorAsRgb.r, g: colorAsRgb.g, b: colorAsRgb.b };
 }
+
+export function clamp(n: number, min: number = 0, max: number = 1): number {
+  return Math.max(min, Math.min(max, n));
+}

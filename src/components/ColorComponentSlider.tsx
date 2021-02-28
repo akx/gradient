@@ -1,8 +1,11 @@
 import React from "react";
 import {
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
+  NumberInput,
+  NumberInputField,
   Slider,
   SliderFilledTrack,
   SliderThumb,
@@ -35,19 +38,34 @@ export function ColorComponentSlider({
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
-      <Slider
-        colorScheme={colorScheme}
-        value={value}
-        step={0}
-        onChange={(val) => onChange(eventKey, val)}
-        min={min}
-        max={max}
-      >
-        <SliderTrack>
-          <SliderFilledTrack bg={trackColor} />
-        </SliderTrack>
-        <SliderThumb />
-      </Slider>
+      <Flex>
+        <Slider
+          flex={1}
+          mr="1rem"
+          colorScheme={colorScheme}
+          value={value}
+          step={0}
+          onChange={(val) => onChange(eventKey, val)}
+          min={min}
+          max={max}
+          focusThumbOnChange={false}
+        >
+          <SliderTrack>
+            <SliderFilledTrack bg={trackColor} />
+          </SliderTrack>
+          <SliderThumb />
+        </Slider>
+        <NumberInput
+          maxW="4rem"
+          size="xs"
+          min={min}
+          max={max}
+          value={value}
+          onChange={(valStr, val) => onChange(eventKey, val)}
+        >
+          <NumberInputField />
+        </NumberInput>
+      </Flex>
       {formatHelp ? <FormHelperText>{formatHelp(value)}</FormHelperText> : null}
     </FormControl>
   );

@@ -3,10 +3,13 @@ import {
   Button,
   ButtonGroup,
   Divider,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   Grid,
+  NumberInput,
+  NumberInputField,
   Slider,
   SliderThumb,
   SliderTrack,
@@ -14,7 +17,7 @@ import {
 import React from "react";
 import { ColorStop } from "../types";
 import * as culori from "culori";
-import { modifyHSL } from "../utils";
+import { clamp, modifyHSL } from "../utils";
 import { ColorComponentSlider } from "./ColorComponentSlider";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 
@@ -39,25 +42,25 @@ export function StopEditor({ stop }: StopEditorProps) {
       const { color } = newStop;
       switch (eventKey) {
         case "red":
-          newStop.color = { ...color, r: value };
+          newStop.color = { ...color, r: clamp(value) };
           break;
         case "green":
-          newStop.color = { ...color, g: value };
+          newStop.color = { ...color, g: clamp(value) };
           break;
         case "blue":
-          newStop.color = { ...color, b: value };
+          newStop.color = { ...color, b: clamp(value) };
           break;
         case "alpha":
-          newStop.color = { ...color, a: value };
+          newStop.color = { ...color, a: clamp(value) };
           break;
         case "hue":
           newStop.color = modifyHSL(color, { h: value });
           break;
         case "saturation":
-          newStop.color = modifyHSL(color, { s: value });
+          newStop.color = modifyHSL(color, { s: clamp(value) });
           break;
         case "lightness":
-          newStop.color = modifyHSL(color, { l: value });
+          newStop.color = modifyHSL(color, { l: clamp(value) });
           break;
       }
       csApi.change(newStop);
@@ -69,17 +72,36 @@ export function StopEditor({ stop }: StopEditorProps) {
     <Box borderWidth="1px" borderRadius="lg" p={6}>
       <FormControl>
         <FormLabel>Position</FormLabel>
-        <Slider
-          value={stop.position}
-          step={0}
-          min={0}
-          max={1}
-          onChange={(val) => csApi.changePartial(stop.id, { position: val })}
-        >
-          <SliderTrack />
-          <SliderThumb />
-        </Slider>
-        <FormHelperText>{(stop.position * 100).toFixed(2)}%</FormHelperText>
+        <Flex>
+          <Slider
+            mr="1rem"
+            flex={1}
+            value={stop.position}
+            step={0}
+            min={0}
+            max={1}
+            onChange={(val) =>
+              csApi.changePartial(stop.id, { position: clamp(val) })
+            }
+            focusThumbOnChange={false}
+          >
+            <SliderTrack />
+            <SliderThumb />
+          </Slider>
+          <NumberInput
+            maxW="5rem"
+            size="xs"
+            min={0}
+            max={1}
+            value={stop.position}
+            precision={4}
+            onChange={(valStr, val) =>
+              csApi.changePartial(stop.id, { position: clamp(val) })
+            }
+          >
+            <NumberInputField />
+          </NumberInput>
+        </Flex>
       </FormControl>
       <Grid templateColumns="repeat(4, 1fr)" gap={6}>
         <Box>
