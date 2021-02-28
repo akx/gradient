@@ -24,7 +24,7 @@ type ColorComponentSliderProps = {
   trackColor?: string;
 };
 
-export function ColorComponentSlider({
+function ColorComponentSlider({
   onChange,
   label,
   value,
@@ -70,3 +70,5 @@ export function ColorComponentSlider({
     </FormControl>
   );
 }
+
+export default React.memo(ColorComponentSlider);

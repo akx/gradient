@@ -17,7 +17,7 @@ import React from "react";
 import { ColorStop } from "../types";
 import * as culori from "culori";
 import { clamp, modifyHSL } from "../utils";
-import { ColorComponentSlider } from "./ColorComponentSlider";
+import ColorComponentSlider from "./ColorComponentSlider";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 
 type StopEditorProps = {

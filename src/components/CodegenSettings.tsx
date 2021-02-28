@@ -53,7 +53,6 @@ export default function CodegenSettings() {
         </NumberInput>
       </FormControl>
       <FormControl>
-        <FormLabel>Alpha</FormLabel>
         <Checkbox
           isChecked={codegenConfig.includeAlpha}
           onChange={(e) =>
