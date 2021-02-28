@@ -29,7 +29,7 @@ export function MainAccordion() {
   const { objects: colorStops, selectedId } = useColorStopsAPI();
   const selectedStop = colorStops.find((s) => s.id === selectedId);
   return (
-    <Accordion defaultIndex={[0, 1]} allowMultiple reduceMotion>
+    <Accordion defaultIndex={[0, 1, 2]} allowMultiple reduceMotion>
       <AccordionItem>
         <AccordionHeader>Editor</AccordionHeader>
         <AccordionPanel pb={4}>
