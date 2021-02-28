@@ -43,7 +43,7 @@ export function MainAccordion() {
           </AccordionButton>
         </h2>
         <AccordionPanel pb={4}>
-          <GradientCode colorStops={colorStops} />
+          <GradientCode />
         </AccordionPanel>
       </AccordionItem>
     </Accordion>

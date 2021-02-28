@@ -54,29 +54,24 @@ export function renderGradient(
   const getColor: GetColor = eval(
     generateRawCode(stops, { ...jsCodegenConfig, arrowFunction: true }),
   );
-  for (let x = 0; x < imageData.width; x++) {
-    const i = x / (imageData.width - 1);
-    const [r, g, b, a] = getColor(i);
-    for (let y = 0; y < imageData.height; y++) {
-      const offset = (y * imageData.width + x) * 4;
-      imageData.data[offset] = Math.round(r * 255);
-      imageData.data[offset + 1] = Math.round(g * 255);
-      imageData.data[offset + 2] = Math.round(b * 255);
-      imageData.data[offset + 3] = Math.round((a === undefined ? 1 : a) * 255);
+  const { width, height } = imageData;
+  for (let x = 0; x < width; x++) {
+    const position = x / (width - 1);
+    const [r, g, b, a] = getColor(position);
+    const rc = Math.round(r * 255);
+    const gc = Math.round(g * 255);
+    const bc = Math.round(b * 255);
+    const ac = Math.round((a === undefined ? 1 : a) * 255);
+    for (let y = 0; y < height; y++) {
+      const offset = (y * width + x) * 4;
+      imageData.data[offset] = rc;
+      imageData.data[offset + 1] = gc;
+      imageData.data[offset + 2] = bc;
+      imageData.data[offset + 3] = ac;
     }
   }
   ctx.putImageData(imageData, 0, 0);
-  ctx.drawImage(
-    ctx.canvas,
-    0,
-    0,
-    imageData.width,
-    2,
-    0,
-    0,
-    imageData.width,
-    ctx.canvas.height,
-  );
+  ctx.drawImage(ctx.canvas, 0, 0, width, 2, 0, 0, width, ctx.canvas.height);
 }
 
 export function sample(
