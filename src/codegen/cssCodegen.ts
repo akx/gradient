@@ -1,7 +1,7 @@
 import { ColorStop } from "../types";
 import { cleanGradient } from "../gradients";
 import { CodegenConfig } from "./types";
-import { toCssRgb, toCssRgba } from "../utils";
+import { clamp, toCssRgb, toCssRgba } from "../utils";
 import { formatNumber } from "./utils";
 
 export function generateCssGradientStops(
@@ -22,7 +22,7 @@ export function generateCssGradientStops(
       : toCssRgb(stop.color);
     const posFmt = formatNumber(
       stop.position * 100,
-      config.positionPrecision - 2,
+      clamp(config.positionPrecision - 2, 0, 10),
     );
     cssStops.push(`${cssColor} ${posFmt}%`);
   }

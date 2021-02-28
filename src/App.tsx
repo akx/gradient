@@ -6,18 +6,28 @@ import ColorStopsAPIContext from "./contexts/ColorStopsAPIContext";
 import { MainAccordion } from "./components/MainAccordion";
 import { MainToolbar } from "./components/MainToolbar";
 import { getRandomGradient } from "./examplePalettes";
+import { useObject } from "./hooks/useObject";
+import { CodegenConfig } from "./codegen/types";
+import { defaultConfig } from "./codegen/defaults";
+import CodegenConfigContext from "./contexts/CodegenConfigContext";
 
 function getInitialGradient() {
   return getRandomGradient(0.1);
 }
+function getInitialCodegenConfig() {
+  return { ...defaultConfig };
+}
 
 function App() {
   const colorStopsAPI = useArrayOfObjects<ColorStop>(getInitialGradient);
+  const codegenConfigAPI = useObject<CodegenConfig>(getInitialCodegenConfig);
   return (
     <Container maxW="container.xl">
       <ColorStopsAPIContext.Provider value={colorStopsAPI}>
-        <MainToolbar />
-        <MainAccordion />
+        <CodegenConfigContext.Provider value={codegenConfigAPI}>
+          <MainToolbar />
+          <MainAccordion />
+        </CodegenConfigContext.Provider>
       </ColorStopsAPIContext.Provider>
     </Container>
   );

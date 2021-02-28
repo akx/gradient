@@ -1,8 +1,10 @@
 import React from "react";
 import { ColorStop } from "../types";
 import {
+  Box,
   Button,
   ButtonGroup,
+  Flex,
   Tab,
   TabList,
   TabPanel,
@@ -11,10 +13,12 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { generateCode } from "../codegen/jsCodegen";
-import { defaultConfig, defaultJsConfig } from "../codegen/defaults";
+import { defaultJsConfig } from "../codegen/defaults";
 import { generateCssGradientStops } from "../codegen/cssCodegen";
 import { exportState, importState } from "../export";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
+import CodegenSettings from "./CodegenSettings";
+import { useCodegenConfig } from "../hooks/useCodegenConfig";
 
 export function GradientCode({
   colorStops,
@@ -22,19 +26,28 @@ export function GradientCode({
   colorStops: readonly ColorStop[];
 }) {
   const csApi = useColorStopsAPI();
+  const ccApi = useCodegenConfig();
+  const codegenConfig = ccApi.object;
   const [js, setJS] = React.useState("");
   const [exportData, setExportData] = React.useState("");
+
   React.useEffect(() => {
-    generateCode(colorStops, defaultJsConfig).then(setJS);
-  }, [colorStops]);
+    generateCode(colorStops, { ...defaultJsConfig, ...codegenConfig }).then(
+      setJS,
+    );
+  }, [codegenConfig, colorStops]);
   const tryLoadData = React.useCallback(() => {
-    const newStops = importState(exportData);
-    csApi.replace(newStops);
+    try {
+      const newStops = importState(exportData);
+      csApi.replace(newStops);
+    } catch (error) {
+      alert(error);
+    }
   }, [csApi, exportData]);
-  const css = generateCssGradientStops(colorStops, defaultConfig);
+  const css = generateCssGradientStops(colorStops, codegenConfig);
   return (
-    <>
-      <Tabs>
+    <Flex>
+      <Tabs flex={1}>
         <TabList>
           <Tab>JavaScript</Tab>
           <Tab>CSS</Tab>
@@ -73,6 +86,9 @@ export function GradientCode({
           </TabPanel>
         </TabPanels>
       </Tabs>
-    </>
+      <Box minW="15em" ml={4}>
+        <CodegenSettings />
+      </Box>
+    </Flex>
   );
 }

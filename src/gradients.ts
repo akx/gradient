@@ -1,7 +1,7 @@
 import { Color, ColorStop } from "./types";
 import { sortBy } from "lodash";
 import { generateRawCode, GetColor } from "./codegen/jsCodegen";
-import { defaultJsConfig } from "./codegen/defaults";
+import { JsCodegenConfig } from "./codegen/types";
 
 export function cleanGradient(stops: readonly ColorStop[]): ColorStop[] {
   return sortBy(stops, (cp) => cp.position);
@@ -45,13 +45,14 @@ function interpolate(
 export function renderGradient(
   ctx: CanvasRenderingContext2D,
   stops: readonly ColorStop[],
+  jsCodegenConfig: JsCodegenConfig,
 ) {
   ctx.canvas.width = 0 | ctx.canvas.width;
   // can't be 1 px height because drawImage does interpolation (at least on Chrome)
   const imageData = new ImageData(ctx.canvas.width, 4);
   // eslint-disable-next-line no-eval
   const getColor: GetColor = eval(
-    generateRawCode(stops, { ...defaultJsConfig, arrowFunction: true }),
+    generateRawCode(stops, { ...jsCodegenConfig, arrowFunction: true }),
   );
   for (let x = 0; x < imageData.width; x++) {
     const i = x / (imageData.width - 1);
@@ -61,7 +62,7 @@ export function renderGradient(
       imageData.data[offset] = Math.round(r * 255);
       imageData.data[offset + 1] = Math.round(g * 255);
       imageData.data[offset + 2] = Math.round(b * 255);
-      imageData.data[offset + 3] = Math.round(a * 255);
+      imageData.data[offset + 3] = Math.round((a === undefined ? 1 : a) * 255);
     }
   }
   ctx.putImageData(imageData, 0, 0);

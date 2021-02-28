@@ -68,24 +68,27 @@ export function generateRawCode(
       config.includeAlpha,
       config.valuePrecision,
     );
-    const posFmt = formatNumber(stop.position, config.positionPrecision);
-    if (i === 0 && stop.position > 0) {
+    const stopPos = parseFloat(
+      formatNumber(stop.position, config.positionPrecision),
+    );
+    const posFmt = formatNumber(stopPos, config.positionPrecision);
+    if (i === 0 && stopPos > 0) {
       write(`if(position <= ${posFmt}) return ${colorFmt};`);
     } else if (i === cleanedStops.length - 1) {
       write(`return ${colorFmt};`);
     }
     if (nextStop) {
+      const nextPos = parseFloat(
+        formatNumber(nextStop.position, config.positionPrecision),
+      );
       write(
-        `if(position < ${formatNumber(
-          nextStop.position,
-          config.positionPrecision,
-        )})`,
+        `if(position < ${formatNumber(nextPos, config.positionPrecision)})`,
       );
       write(`{`);
-      let width = nextStop.position - stop.position;
+      let width = nextPos - stopPos;
       const iWidthFmt = formatNumber(1 / width, config.positionPrecision);
 
-      if (stop.position === 0) {
+      if (stopPos === 0) {
         write(`const a = position * ${iWidthFmt}, b = 1 - a;`);
       } else {
         write(`const a = (position - ${posFmt}) * ${iWidthFmt}, b = 1 - a;`);
@@ -115,22 +118,22 @@ export function generateRawCode(
             config.valuePrecision,
           ),
         );
-        write(`return [${components.join(",")}];`);
       }
+      write(`return [${components.join(",")}];`);
       write(`}`);
     }
   }
 
   write("}");
 
-  return formatCode(codeBits.join(""));
+  return codeBits.join("");
 }
 
 export async function generateCode(
   stops: readonly ColorStop[],
   config: JsCodegenConfig,
 ): Promise<string> {
-  const code = generateRawCode(stops, config);
+  const code = formatCode(generateRawCode(stops, config));
   const minifyResult = await minify(code, { mangle: false });
   const minifiedCode = minifyResult.code || "";
   return formatCode(minifiedCode);

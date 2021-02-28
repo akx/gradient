@@ -2,12 +2,15 @@ import { ColorStop } from "../types";
 import React from "react";
 import { renderGradient } from "../gradients";
 import background from "../graphy.png";
+import { useCodegenConfig } from "../hooks/useCodegenConfig";
+import { defaultJsConfig } from "../codegen/defaults";
 
 export function GradientCanvas({
   colorStops,
 }: {
   colorStops: readonly ColorStop[];
 }) {
+  const codegenConfig = useCodegenConfig().object;
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   React.useEffect(() => {
     const canvas = canvasRef.current;
@@ -16,9 +19,12 @@ export function GradientCanvas({
     }
     const context = canvas.getContext("2d");
     if (context) {
-      renderGradient(context, colorStops);
+      renderGradient(context, colorStops, {
+        ...defaultJsConfig,
+        ...codegenConfig,
+      });
     }
-  }, [colorStops]);
+  }, [colorStops, codegenConfig]);
   return (
     <canvas
       ref={canvasRef}
