@@ -8,7 +8,7 @@ export function mangleGradient(
 ): readonly ColorStop[] {
   stops = sortStops(stops);
   if (config.interpolation === InterpolationType.CatmullRom) {
-    stops = catmullRomPoints(stops, config.interpolationPoints);
+    stops = sortStops(catmullRomPoints(stops, config.interpolationPoints));
   }
   return stops;
 }

@@ -1,8 +1,10 @@
 import { ColorStop } from "../types";
-import { sortBy } from "lodash";
+import { sortBy, sortedUniqBy } from "lodash";
+
+const positionGetter = ({position}: ColorStop) => position;
 
 export function sortStops(stops: readonly ColorStop[]): ColorStop[] {
-  return sortBy(stops, (cp) => cp.position);
+  return sortedUniqBy(sortBy(stops, positionGetter), positionGetter);
 }
 
 export function reverseColorStops(
