@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/gradient/static/js/main.d6a20c0b.chunk.js",
+    "main.js": "/gradient/static/js/main.bd3fc575.chunk.js",
     "runtime-main.js": "/gradient/static/js/runtime-main.42762d90.js",
     "static/js/2.3745c081.chunk.js": "/gradient/static/js/2.3745c081.chunk.js",
     "index.html": "/gradient/index.html",
@@ -9,6 +9,6 @@
   "entrypoints": [
     "static/js/runtime-main.42762d90.js",
     "static/js/2.3745c081.chunk.js",
-    "static/js/main.d6a20c0b.chunk.js"
+    "static/js/main.bd3fc575.chunk.js"
   ]
 }
