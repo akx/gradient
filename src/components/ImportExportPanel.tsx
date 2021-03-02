@@ -63,7 +63,9 @@ export default function ImportExportPanel({
         rows={format === "json" ? 15 : 3}
       />
       <ButtonGroup pt={4} spacing="6">
-        <Button onClick={exportCurrent}>Export current state</Button>
+        {autoUpdate ? null : (
+          <Button onClick={exportCurrent}>Export current state</Button>
+        )}
         <Button onClick={tryLoadData}>Load state</Button>
         {format === "compressed" ? (
           <Button onClick={copyLink}>Copy link</Button>
