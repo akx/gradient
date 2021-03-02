@@ -17,7 +17,7 @@ import {
 import React from "react";
 import { ColorStop } from "../types";
 import * as culori from "culori";
-import { clamp, modifyHSL, hexToColor, colorToHex } from "../utils";
+import { clamp, colorToHex, hexToColor, modifyHSL } from "../utils";
 import ColorComponentSlider from "./ColorComponentSlider";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 
@@ -68,6 +68,15 @@ function StopEditor({ stop }: StopEditorProps) {
     [csApi, stop],
   );
   const colorAsHsl = culori.converter("hsl")({ mode: "rgb", ...stop.color });
+  const onChangeHex = React.useCallback(
+    (event) => {
+      const color = hexToColor(event.target.value, stop.color.a);
+      if (color) {
+        csApi.change({ ...stop, color });
+      }
+    },
+    [csApi, stop],
+  );
   return (
     <Box borderWidth="1px" borderRadius="lg" p={6}>
       <FormControl>
@@ -197,21 +206,8 @@ function StopEditor({ stop }: StopEditorProps) {
             maxW="5rem"
             size="xs"
             value={colorToHex(stop.color)}
-            onChange={React.useCallback(
-              (ev) => {
-                const newStop = { ...stop };
-                const newColor = hexToColor(ev.target.value);
-                if (newColor !== null) {
-                  newStop.color = {
-                    ...newColor,
-                    a: stop.color.a,
-                  };
-                }
-                csApi.change(newStop);
-              },
-              [csApi, stop],
-            )}
-          ></Input>
+            onChange={onChangeHex}
+          />
         </Box>
       </Grid>
       <Divider py={4} />
@@ -223,4 +219,5 @@ function StopEditor({ stop }: StopEditorProps) {
     </Box>
   );
 }
+
 export default StopEditor;

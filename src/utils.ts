@@ -36,16 +36,17 @@ export function clamp(n: number, min: number = 0, max: number = 1): number {
   return Math.max(min, Math.min(max, n));
 }
 
-export function hexToColor(hex: string): Color | null {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        a: 1.0,
-        r: parseInt(result[1], 16) / 255.0,
-        g: parseInt(result[2], 16) / 255.0,
-        b: parseInt(result[3], 16) / 255.0,
-      }
-    : null;
+export function hexToColor(hex: string, a: number = 1): Color | null {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) {
+    return null;
+  }
+  return {
+    a,
+    r: parseInt(result[1], 16) / 255.0,
+    g: parseInt(result[2], 16) / 255.0,
+    b: parseInt(result[3], 16) / 255.0,
+  };
 }
 
 export function colorToHex(c: Color): string {
