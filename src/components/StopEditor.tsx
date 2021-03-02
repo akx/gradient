@@ -192,28 +192,26 @@ function StopEditor({ stop }: StopEditorProps) {
       </Grid>
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
         <Box>
-        <FormLabel>Hex value</FormLabel>
-        <Input
+          <FormLabel>Hex value</FormLabel>
+          <Input
             maxW="5rem"
             size="xs"
             value={colorToHex(stop.color)}
-            onChange={
-              React.useCallback(ev => {
-                  const newStop = { ...stop };
-                  const newColor = hexToColor(ev.target.value);
-                  if (newColor !== null) {
-                    newStop.color = {
-                      ...newColor,
-                      a: stop.color.a,
-                    };
-                  }
-                  csApi.change(newStop);
-                },
-                [csApi, stop],
-              )
-            }
-          >
-          </Input>
+            onChange={React.useCallback(
+              (ev) => {
+                const newStop = { ...stop };
+                const newColor = hexToColor(ev.target.value);
+                if (newColor !== null) {
+                  newStop.color = {
+                    ...newColor,
+                    a: stop.color.a,
+                  };
+                }
+                csApi.change(newStop);
+              },
+              [csApi, stop],
+            )}
+          ></Input>
         </Box>
       </Grid>
       <Divider py={4} />

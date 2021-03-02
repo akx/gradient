@@ -38,15 +38,21 @@ export function clamp(n: number, min: number = 0, max: number = 1): number {
 
 export function hexToColor(hex: string): Color | null {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    a: 1.0,
-    r: parseInt(result[1], 16) / 255.0,
-    g: parseInt(result[2], 16) / 255.0,
-    b: parseInt(result[3], 16) / 255.0
-  } : null;
+  return result
+    ? {
+        a: 1.0,
+        r: parseInt(result[1], 16) / 255.0,
+        g: parseInt(result[2], 16) / 255.0,
+        b: parseInt(result[3], 16) / 255.0,
+      }
+    : null;
 }
 
 export function colorToHex(c: Color): string {
-  const hex = (c: number) => Math.round(c * 255).toString(16).padStart(2, '0').toUpperCase();
+  const hex = (c: number) =>
+    Math.round(c * 255)
+      .toString(16)
+      .padStart(2, "0")
+      .toUpperCase();
   return `#${hex(c.r)}${hex(c.g)}${hex(c.b)}`;
 }
