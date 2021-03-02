@@ -11,6 +11,7 @@ import { CodegenConfig } from "./codegen/types";
 import { defaultConfig } from "./codegen/defaults";
 import CodegenConfigContext from "./contexts/CodegenConfigContext";
 import GradientConfigContext from "./contexts/GradientConfigContext";
+import { useInitialStateFromQuery } from "./hooks/useInitialStateFromQuery";
 
 function getInitialGradient() {
   return getRandomGradient(0.1);
@@ -31,6 +32,7 @@ function App() {
   const colorStopsAPI = useArrayOfObjects<ColorStop>(getInitialGradient);
   const codegenConfigAPI = useObject<CodegenConfig>(getInitialCodegenConfig);
   const gradientConfigAPI = useObject<GradientConfig>(getInitialGradientConfig);
+  useInitialStateFromQuery(colorStopsAPI.replace);
   return (
     <Container maxW="container.xl">
       <ColorStopsAPIContext.Provider value={colorStopsAPI}>

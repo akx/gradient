@@ -1,6 +1,6 @@
-import { ColorStop } from "./types";
 import * as z from "zod";
-import { sortStops } from "./gradients/utils";
+import { ColorStop } from "../types";
+import { sortStops } from "../gradients/utils";
 
 const stateSchema = z.array(
   z.object({
@@ -17,7 +17,7 @@ const stateSchema = z.array(
   }),
 );
 
-export function exportState(colorStops: readonly ColorStop[]): string {
+export function exportJSON(colorStops: readonly ColorStop[]): string {
   return JSON.stringify(
     sortStops(colorStops).map((stop) => {
       const c: Record<string, any> = { ...stop };
@@ -29,8 +29,7 @@ export function exportState(colorStops: readonly ColorStop[]): string {
   );
 }
 
-export function importState(stateJSON: string): ColorStop[] {
-  const state = JSON.parse(stateJSON);
+export function importJSON(state: any): ColorStop[] {
   if (!Array.isArray(state)) {
     throw new Error("not an array");
   }
