@@ -7,6 +7,7 @@ import {
   FormControl,
   FormLabel,
   Grid,
+  Input,
   NumberInput,
   NumberInputField,
   Slider,
@@ -16,7 +17,7 @@ import {
 import React from "react";
 import { ColorStop } from "../types";
 import * as culori from "culori";
-import { clamp, modifyHSL } from "../utils";
+import { clamp, modifyHSL, hexToColor, colorToHex } from "../utils";
 import ColorComponentSlider from "./ColorComponentSlider";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 
@@ -28,7 +29,7 @@ const formatComponentHelp = (value: number) => {
   const intValue = Math.round(value * 255);
   return (
     <>
-      {value.toFixed(5)} ({intValue}, {intValue.toString(16)})
+      {value.toFixed(5)} ({intValue})
     </>
   );
 };
@@ -187,6 +188,32 @@ function StopEditor({ stop }: StopEditorProps) {
             max={1}
             trackColor={`hsl(0deg, 0%, ${(colorAsHsl.l * 100).toFixed(1)}%)`}
           />
+        </Box>
+      </Grid>
+      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+        <Box>
+        <FormLabel>Hex value</FormLabel>
+        <Input
+            maxW="5rem"
+            size="xs"
+            value={colorToHex(stop.color)}
+            onChange={
+              React.useCallback(ev => {
+                  const newStop = { ...stop };
+                  const newColor = hexToColor(ev.target.value);
+                  if (newColor !== null) {
+                    newStop.color = {
+                      ...newColor,
+                      a: stop.color.a,
+                    };
+                  }
+                  csApi.change(newStop);
+                },
+                [csApi, stop],
+              )
+            }
+          >
+          </Input>
         </Box>
       </Grid>
       <Divider py={4} />
