@@ -73,10 +73,10 @@ export function generateRawCode(
       formatNumber(stop.position, config.positionPrecision),
     );
     const posFmt = formatNumber(stopPos, config.positionPrecision);
-    if (i === 0 && stopPos > 0) {
-      write(`if(position <= ${posFmt}) return ${colorFmt};`);
-    } else if (i === cleanedStops.length - 1) {
+    if (i === cleanedStops.length - 1) {
       write(`return ${colorFmt};`);
+    } else if (i === 0 && stopPos > 0) {
+      write(`if(position <= ${posFmt}) return ${colorFmt};`);
     }
     if (nextStop) {
       const nextPos = parseFloat(
