@@ -1,6 +1,7 @@
 import { ColorStop } from "../types";
 import React from "react";
 import background from "../graphy.png";
+import noisyBackground from "../nois.gif";
 import { useCodegenConfig } from "../hooks/useCodegenConfig";
 import { defaultJsConfig } from "../codegen/defaults";
 import { renderGradient } from "../gradients/render";
@@ -23,12 +24,20 @@ function GradientCanvas({ colorStops }: { colorStops: readonly ColorStop[] }) {
       });
     }
   }, [colorStops, codegenConfig, gradientConfig]);
+  const backgroundStyle: Partial<React.CSSProperties> =
+    colorStops.length > 0
+      ? { background: `url(${background})` }
+      : {
+          backgroundImage: `url(${noisyBackground})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+        };
   return (
     <canvas
       ref={canvasRef}
       width={1200}
       height={150}
-      style={{ width: "100%", background: `url(${background})` }}
+      style={{ width: "100%", ...backgroundStyle }}
     />
   );
 }

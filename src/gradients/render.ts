@@ -9,6 +9,9 @@ export function renderGradient(
   jsCodegenConfig: JsCodegenConfig,
 ) {
   ctx.canvas.width = 0 | ctx.canvas.width;
+  if (stops.length === 0) {
+    return;
+  }
   // can't be 1 px height because drawImage does interpolation (at least on Chrome)
   const imageData = new ImageData(ctx.canvas.width, 4);
   // eslint-disable-next-line no-eval
