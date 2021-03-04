@@ -17,7 +17,6 @@ function computeLinearInterpolation(
     positions.push(position);
     values.push(value);
   });
-  console.log(positions, values);
   for (let i = 0; i < interpolationPoints; i++) {
     const p = i / (interpolationPoints - 1);
     const result = interpolate(positions, values, p);
@@ -54,13 +53,10 @@ export function mangleGradient(
     [position].concat(converter.fromColor(color)),
   );
   const interpolatedPoints = applyInterpolation(pointsInDestColorSpace, config);
-
-  console.log("interp", interpolatedPoints);
   const outStops = interpolatedPoints.map(([position, ...rest], i) => ({
     id: `x${i}`,
     position: clamp(position),
     color: converter.toColor(rest),
   }));
-  console.log("out", outStops);
   return sortStops(outStops);
 }
