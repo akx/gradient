@@ -7,8 +7,10 @@ declare module "culori" {
     l: number;
   };
   type RGB = Color & { mode: "rgb"; r: number; g: number; b: number };
-  type Converter<T extends Color = Color> = (color: Color) => T;
+  type LAB = Color & { mode: "lab"; l: number; a: number; b: number };
+  type Converter<TOut extends Color = Color> = (color: any) => TOut;
   export function converter(mode: string): Converter;
   export function converter(mode: "hsl"): Converter<HSL>;
   export function converter(mode: "rgb"): Converter<RGB>;
+  export function converter(mode: "oklab"): Converter<LAB>;
 }
