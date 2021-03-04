@@ -23,8 +23,9 @@ function getInitialCodegenConfig() {
 
 function getInitialGradientConfig(): GradientConfig {
   return {
-    interpolation: InterpolationType.Linear,
+    interpolation: InterpolationType.Plain,
     interpolationPoints: 10,
+    colorspace: "srgb",
   };
 }
 

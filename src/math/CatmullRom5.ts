@@ -11,7 +11,7 @@ export function compute5DCatmullRomPoints(
   closed = false,
   curveType: string = "centripetal",
   tension = 0.5,
-): readonly Point5D[] {
+): Point5D[] {
   const outPoints: Point5D[] = [];
   const cps: [CubicPoly, CubicPoly, CubicPoly, CubicPoly, CubicPoly] = [
     cubicPoly.zero(),
