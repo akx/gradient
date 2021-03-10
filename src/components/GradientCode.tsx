@@ -2,6 +2,7 @@ import React from "react";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import GradientJSCodePanel from "./JSCodePanel";
 import GradientCSSCodePanel from "./CSSCodePanel";
+import GradientSVGCodePanel from "./SVGCodePanel";
 import ImportExportPanel from "./ImportExportPanel";
 import { ExportFormat } from "../export";
 
@@ -11,6 +12,7 @@ function GradientCode() {
       <TabList>
         <Tab>JavaScript</Tab>
         <Tab>CSS</Tab>
+        <Tab>SVG</Tab>
         <Tab>JSON (import/export)</Tab>
         <Tab>Compressed (import/export)</Tab>
       </TabList>
@@ -20,6 +22,9 @@ function GradientCode() {
         </TabPanel>
         <TabPanel>
           <GradientCSSCodePanel />
+        </TabPanel>
+        <TabPanel>
+          <GradientSVGCodePanel />
         </TabPanel>
         <TabPanel>
           <ImportExportPanel format={ExportFormat.JSON} />
