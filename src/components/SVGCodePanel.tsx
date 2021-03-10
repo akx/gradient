@@ -1,9 +1,7 @@
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 import { useCodegenConfig } from "../hooks/useCodegenConfig";
 import React from "react";
-import { useDebounce } from "react-use";
 import { generateSVGGradient } from "../codegen/svgCodegen";
-import { defaultConfig } from "../codegen/defaults";
 import { Box, Flex, Textarea } from "@chakra-ui/react";
 import CodegenSettings from "./CodegenSettings";
 import { useGradientConfig } from "../hooks/useGradientConfig";
