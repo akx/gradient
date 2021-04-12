@@ -14,13 +14,12 @@ export function renderGradient(
   }
   // can't be 1 px height because drawImage does interpolation (at least on Chrome)
   const imageData = new ImageData(ctx.canvas.width, 4);
+  const code = generateRawCode(stops, gradientConfig, {
+    ...jsCodegenConfig,
+    arrowFunction: true,
+  });
   // eslint-disable-next-line no-eval
-  const getColor: GetColor = eval(
-    generateRawCode(stops, gradientConfig, {
-      ...jsCodegenConfig,
-      arrowFunction: true,
-    }),
-  );
+  const getColor: GetColor = eval(code);
   const { width, height } = imageData;
   for (let x = 0; x < width; x++) {
     const position = x / (width - 1);

@@ -47,20 +47,11 @@ function formatCode(minifiedCode: string) {
   });
 }
 
-export function generateRawCode(
-  stops: readonly ColorStop[],
-  gradientConfig: GradientConfig,
+function writeJSBody(
+  write: (s: string) => void,
+  cleanedStops: readonly ColorStop[],
   config: JsCodegenConfig,
 ) {
-  const cleanedStops = mangleGradient(stops, gradientConfig);
-  const codeBits: string[] = [];
-  const write = codeBits.push.bind(codeBits);
-  if (config.arrowFunction) {
-    write("(position) => {");
-  } else {
-    write("function getColor(position) {");
-  }
-
   for (let i = 0; i < cleanedStops.length; i++) {
     const stop = cleanedStops[i];
     const nextStop = i < cleanedStops.length - 1 ? cleanedStops[i + 1] : null;
@@ -123,6 +114,26 @@ export function generateRawCode(
       write(`return [${components.join(",")}];`);
       write(`}`);
     }
+  }
+}
+
+export function generateRawCode(
+  stops: readonly ColorStop[],
+  gradientConfig: GradientConfig,
+  config: JsCodegenConfig,
+) {
+  const cleanedStops = mangleGradient(stops, gradientConfig);
+  const codeBits: string[] = [];
+  const write = codeBits.push.bind(codeBits);
+  if (config.arrowFunction) {
+    write("(position) => {");
+  } else {
+    write("function getColor(position) {");
+  }
+  if (cleanedStops.length) {
+    writeJSBody(write, cleanedStops, config);
+  } else {
+    write("return [0, 0, 0, 0]; /* No stops */");
   }
 
   write("}");
