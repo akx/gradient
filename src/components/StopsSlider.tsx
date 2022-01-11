@@ -75,7 +75,7 @@ function StopsSlider({
           b: 1,
           a: 1,
         };
-        let id = Math.random().toString(32);
+        const id = Math.random().toString(32);
         csApi.add({
           id,
           position,

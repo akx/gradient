@@ -1,4 +1,4 @@
-import b64ab from "base64-arraybuffer";
+import * as b64ab from "base64-arraybuffer";
 import { ColorStop } from "../types";
 import { clamp } from "../utils";
 

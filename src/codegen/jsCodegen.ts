@@ -11,11 +11,11 @@ function formatColorReturn(
   withAlpha: boolean,
   precision: number,
 ): string {
-  let rf = formatNumber(r, precision);
-  let gf = formatNumber(g, precision);
-  let bf = formatNumber(b, precision);
+  const rf = formatNumber(r, precision);
+  const gf = formatNumber(g, precision);
+  const bf = formatNumber(b, precision);
   if (withAlpha) {
-    let af = formatNumber(a, precision);
+    const af = formatNumber(a, precision);
     return `[${rf},${gf},${bf},${af}]`;
   }
   return `[${rf},${gf},${bf}]`;
@@ -77,7 +77,7 @@ function writeJSBody(
         `if(position < ${formatNumber(nextPos, config.positionPrecision)})`,
       );
       write(`{`);
-      let width = nextPos - stopPos;
+      const width = nextPos - stopPos;
       const iWidthFmt = formatNumber(1 / width, config.positionPrecision);
 
       if (stopPos === 0) {
