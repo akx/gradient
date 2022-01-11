@@ -20,11 +20,14 @@ import { converters } from "../colorspaces";
 export default function GradientConfigPanel() {
   const gradientConfigAPI = useGradientConfig();
   const gradientConfig = gradientConfigAPI.object;
+  const colorspaceName =
+    converters.find((c) => c.id === gradientConfig.colorspace)?.name ?? "???";
   return (
     <Grid templateColumns="repeat(3, 1fr)" gap={6}>
       <FormControl>
         <FormLabel>Color Space</FormLabel>
         <RadioGroup
+          isDisabled={gradientConfig.interpolation === InterpolationType.Plain}
           onChange={(colorspace) =>
             gradientConfigAPI.change({
               colorspace: colorspace.toString(),
@@ -51,10 +54,14 @@ export default function GradientConfigPanel() {
           }
           value={gradientConfig.interpolation}
         >
-          <Stack direction="row">
+          <Stack direction="column">
             <Radio value={InterpolationType.Plain}>Plain (Linear)</Radio>
-            <Radio value={InterpolationType.Linear}>Linear</Radio>
-            <Radio value={InterpolationType.CatmullRom}>Catmull-Rom 5D</Radio>
+            <Radio value={InterpolationType.Linear}>
+              Linear in {colorspaceName}
+            </Radio>
+            <Radio value={InterpolationType.CatmullRom}>
+              Catmull-Rom 5D in {colorspaceName}
+            </Radio>
           </Stack>
         </RadioGroup>
       </FormControl>
