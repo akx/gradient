@@ -1,14 +1,5 @@
-import {
-  ModalOverlay,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  Box,
-  Link,
-} from "@chakra-ui/react";
 import React from "react";
+import { tw } from "twind";
 
 function HelpContent() {
   return (
@@ -16,17 +7,31 @@ function HelpContent() {
       <li>Double-click on the stop slider to add new stops</li>
       <li>Stops can be dragged on the slider too</li>
       <li>
-        <Link
-          color="teal.500"
-          isExternal
-          href="https://github.com/akx/gradient"
-        >
-          Open source
-        </Link>
+        <a href="https://github.com/akx/gradient">Open source</a>
       </li>
     </ul>
   );
 }
+
+const bodyStyle: React.CSSProperties = {
+  position: "fixed",
+  top: "5vh",
+  width: "30em",
+  left: "50%",
+  marginLeft: "-15em",
+  background: "#fff",
+  zIndex: 9000,
+};
+
+const overlayStyle: React.CSSProperties = {
+  background: "rgba(0,0,0,40%)",
+  position: "fixed",
+  left: "0",
+  top: "0",
+  width: "100%",
+  height: "100%",
+  zIndex: 8000,
+};
 
 export function HelpModal({
   onClose,
@@ -35,18 +40,13 @@ export function HelpModal({
   open: boolean;
   onClose: () => void;
 }) {
+  if (!open) return null;
   return (
-    <Modal isOpen={open} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Help</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Box p={4}>
-            <HelpContent />
-          </Box>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+    <div>
+      <div style={overlayStyle} onClick={onClose} />
+      <div style={bodyStyle} className={tw`p-4`}>
+        <HelpContent />
+      </div>
+    </div>
   );
 }

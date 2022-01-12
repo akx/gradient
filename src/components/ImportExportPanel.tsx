@@ -1,7 +1,10 @@
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 import React from "react";
 import { ExportFormat, exportInFormat, importState } from "../export";
-import { Button, ButtonGroup, Textarea, useToast } from "@chakra-ui/react";
+import { Textarea } from "../om/forms";
+import { Button, ButtonGroup } from "../om/button";
+import { tw } from "twind";
+import { useToast } from "../om/hooks";
 
 export default function ImportExportPanel({
   format,
@@ -61,8 +64,9 @@ export default function ImportExportPanel({
         value={exportData}
         onChange={(e) => setExportData(e.target.value)}
         rows={format === "json" ? 15 : 3}
+        className={tw`w-full`}
       />
-      <ButtonGroup pt={4} spacing="6">
+      <ButtonGroup className={`pt-2`} spacing={4}>
         {autoUpdate ? null : (
           <Button onClick={exportCurrent}>Export current state</Button>
         )}

@@ -1,7 +1,7 @@
 import { ColorStop } from "../types";
-import { useToast } from "@chakra-ui/react";
 import React from "react";
 import { importState } from "../export";
+import { useToast } from "../om/hooks";
 
 export function useInitialStateFromQuery(
   replaceColorStops: (value: ColorStop[]) => void,
