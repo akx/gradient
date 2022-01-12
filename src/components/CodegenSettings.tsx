@@ -1,23 +1,14 @@
-import {
-  Checkbox,
-  FormControl,
-  FormLabel,
-  Grid,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-} from "@chakra-ui/react";
 import React from "react";
 import { useCodegenConfig } from "../hooks/useCodegenConfig";
 import { clamp } from "../utils";
+import { tw } from "twind";
+import { Checkbox, FormControl, FormLabel, NumberInput } from "../om/forms";
 
 export default function CodegenSettings() {
   const codegenConfigAPI = useCodegenConfig();
   const codegenConfig = codegenConfigAPI.object;
   return (
-    <Grid templateRows="repeat(3, 1fr)" gap={6}>
+    <div className={tw`grid grid-rows-3 gap-2`}>
       <FormControl>
         <FormLabel>Value precision</FormLabel>
         <NumberInput
@@ -27,13 +18,7 @@ export default function CodegenSettings() {
           onChange={(_, v) =>
             codegenConfigAPI.change({ valuePrecision: clamp(v, 0, 10) })
           }
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
+        />
       </FormControl>
       <FormControl>
         <FormLabel>Position precision</FormLabel>
@@ -44,13 +29,7 @@ export default function CodegenSettings() {
           onChange={(_, v) =>
             codegenConfigAPI.change({ positionPrecision: clamp(v, 0, 10) })
           }
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
+        />
       </FormControl>
       <FormControl>
         <Checkbox
@@ -62,6 +41,6 @@ export default function CodegenSettings() {
           Include alpha
         </Checkbox>
       </FormControl>
-    </Grid>
+    </div>
   );
 }

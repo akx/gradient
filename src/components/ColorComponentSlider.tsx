@@ -1,34 +1,29 @@
 import React from "react";
+import { tw } from "twind";
 import {
-  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   NumberInput,
-  NumberInputField,
   Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
-} from "@chakra-ui/react";
+} from "../om/forms";
+import { Flex } from "../om/layout";
 
-type ColorComponentSliderProps = {
+interface ColorComponentSliderProps {
   label: string;
   onChange: (eventKey: string, n: number) => void;
   value: number;
-  colorScheme?: string;
   eventKey: string;
   min: number;
   max: number;
   formatHelp?: (value: number) => React.ReactNode;
   trackColor?: string;
-};
+}
 
 function ColorComponentSlider({
   onChange,
   label,
   value,
-  colorScheme,
   eventKey,
   min,
   max,
@@ -40,31 +35,22 @@ function ColorComponentSlider({
       <FormLabel>{label}</FormLabel>
       <Flex>
         <Slider
-          flex={1}
-          mr="1rem"
-          colorScheme={colorScheme}
+          className={tw`flex-1 mr-1`}
+          style={{ accentColor: trackColor }}
           value={value}
-          step={0}
-          onChange={(val) => onChange(eventKey, val)}
+          step="any"
+          onChange={(e) => onChange(eventKey, e.target.valueAsNumber)}
           min={min}
           max={max}
-          focusThumbOnChange={false}
-        >
-          <SliderTrack>
-            <SliderFilledTrack bg={trackColor} />
-          </SliderTrack>
-          <SliderThumb />
-        </Slider>
+        />
         <NumberInput
-          maxW="4rem"
-          size="xs"
+          style={{ width: "7rem" }}
           min={min}
           max={max}
+          step={(max - min) / 100}
           value={value}
           onChange={(valStr, val) => onChange(eventKey, val)}
-        >
-          <NumberInputField />
-        </NumberInput>
+        />
       </Flex>
       {formatHelp ? <FormHelperText>{formatHelp(value)}</FormHelperText> : null}
     </FormControl>

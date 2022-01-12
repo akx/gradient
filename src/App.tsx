@@ -1,4 +1,3 @@
-import { Container } from "@chakra-ui/react";
 import React from "react";
 import { ColorStop, GradientConfig, InterpolationType } from "./types";
 import { useArrayOfObjects } from "./hooks/useArrayOfObjects";
@@ -12,6 +11,7 @@ import { defaultConfig } from "./codegen/defaults";
 import CodegenConfigContext from "./contexts/CodegenConfigContext";
 import GradientConfigContext from "./contexts/GradientConfigContext";
 import { useInitialStateFromQuery } from "./hooks/useInitialStateFromQuery";
+import { tw } from "twind";
 
 function getInitialGradient() {
   return getRandomGradient(0.1);
@@ -35,7 +35,7 @@ function App() {
   const gradientConfigAPI = useObject<GradientConfig>(getInitialGradientConfig);
   useInitialStateFromQuery(colorStopsAPI.replace);
   return (
-    <Container maxW="container.xl">
+    <div className={tw`container mx-auto`}>
       <ColorStopsAPIContext.Provider value={colorStopsAPI}>
         <CodegenConfigContext.Provider value={codegenConfigAPI}>
           <GradientConfigContext.Provider value={gradientConfigAPI}>
@@ -44,7 +44,7 @@ function App() {
           </GradientConfigContext.Provider>
         </CodegenConfigContext.Provider>
       </ColorStopsAPIContext.Provider>
-    </Container>
+    </div>
   );
 }
 

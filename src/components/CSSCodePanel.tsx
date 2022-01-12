@@ -1,10 +1,12 @@
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 import { useCodegenConfig } from "../hooks/useCodegenConfig";
 import { generateCssGradientStops } from "../codegen/cssCodegen";
-import { Box, Flex, Textarea } from "@chakra-ui/react";
 import React from "react";
 import CodegenSettings from "./CodegenSettings";
 import { useGradientConfig } from "../hooks/useGradientConfig";
+import { tw } from "twind";
+import { Textarea } from "../om/forms";
+import { Box, Flex } from "../om/layout";
 
 export default function GradientCSSCode() {
   const csApi = useColorStopsAPI();
@@ -21,8 +23,9 @@ export default function GradientCSSCode() {
         style={{
           background: `linear-gradient(to right, ${css})`,
         }}
+        className={tw`flex-1`}
       />
-      <Box minW="15em" ml={4}>
+      <Box className={tw`ml-3`} style={{ minWidth: "15em" }}>
         <CodegenSettings />
       </Box>
     </Flex>

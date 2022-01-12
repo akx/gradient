@@ -1,21 +1,12 @@
-import {
-  FormControl,
-  FormLabel,
-  Grid,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Radio,
-  RadioGroup,
-  Stack,
-} from "@chakra-ui/react";
 import React from "react";
 import { useGradientConfig } from "../hooks/useGradientConfig";
 import { clamp } from "../utils";
 import { InterpolationType } from "../types";
 import { converters } from "../colorspaces";
+import { tw } from "twind";
+import { FormControl, FormLabel, NumberInput } from "../om/forms";
+import { Radio, RadioGroup } from "../om/radio";
+import { Stack } from "../om/layout";
 
 export default function GradientConfigPanel() {
   const gradientConfigAPI = useGradientConfig();
@@ -23,7 +14,7 @@ export default function GradientConfigPanel() {
   const colorspaceName =
     converters.find((c) => c.id === gradientConfig.colorspace)?.name ?? "???";
   return (
-    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+    <div className={tw`grid grid-cols-3 gap-2`}>
       <FormControl>
         <FormLabel>Color Space</FormLabel>
         <RadioGroup
@@ -65,9 +56,7 @@ export default function GradientConfigPanel() {
           </Stack>
         </RadioGroup>
       </FormControl>
-      <FormControl
-        isDisabled={gradientConfig.interpolation === InterpolationType.Plain}
-      >
+      <FormControl>
         <FormLabel>Interpolation points</FormLabel>
         <NumberInput
           isDisabled={gradientConfig.interpolation === InterpolationType.Plain}
@@ -77,14 +66,8 @@ export default function GradientConfigPanel() {
           onChange={(_, v) =>
             gradientConfigAPI.change({ interpolationPoints: clamp(v, 2, 100) })
           }
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
+        />
       </FormControl>
-    </Grid>
+    </div>
   );
 }

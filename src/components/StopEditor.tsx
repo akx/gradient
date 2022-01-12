@@ -1,25 +1,19 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Divider,
-  Flex,
-  FormControl,
-  FormLabel,
-  Grid,
-  Input,
-  NumberInput,
-  NumberInputField,
-  Slider,
-  SliderThumb,
-  SliderTrack,
-} from "@chakra-ui/react";
 import React from "react";
 import { ColorStop } from "../types";
 import * as culori from "culori";
 import { clamp, colorToHex, hexToColor, modifyHSL } from "../utils";
 import ColorComponentSlider from "./ColorComponentSlider";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
+import { tw } from "twind";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  NumberInput,
+  Slider,
+} from "../om/forms";
+import { Button, ButtonGroup } from "../om/button";
+import { Box, Flex } from "../om/layout";
 
 type StopEditorProps = {
   stop: ColorStop;
@@ -27,11 +21,7 @@ type StopEditorProps = {
 
 const formatComponentHelp = (value: number) => {
   const intValue = Math.round(value * 255);
-  return (
-    <>
-      {value.toFixed(5)} ({intValue})
-    </>
-  );
+  return <>{intValue}</>;
 };
 
 function StopEditor({ stop }: StopEditorProps) {
@@ -78,41 +68,35 @@ function StopEditor({ stop }: StopEditorProps) {
     [csApi, stop],
   );
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={6}>
+    <Box className={tw`border-1 rounded-lg`} p={6}>
       <FormControl>
         <FormLabel>Position</FormLabel>
         <Flex>
           <Slider
-            mr="1rem"
-            flex={1}
+            className={tw`mr-2 flex-1`}
             value={stop.position}
-            step={0}
+            step="any"
             min={0}
             max={1}
-            onChange={(val) =>
-              csApi.changePartial(stop.id, { position: clamp(val) })
+            onChange={(e) =>
+              csApi.changePartial(stop.id, {
+                position: clamp(e.target.valueAsNumber),
+              })
             }
-            focusThumbOnChange={false}
-          >
-            <SliderTrack />
-            <SliderThumb />
-          </Slider>
+          />
           <NumberInput
-            maxW="5rem"
-            size="xs"
+            style={{ width: "7rem" }}
             min={0}
             max={1}
+            step={0.01}
             value={stop.position}
-            precision={4}
-            onChange={(valStr, val) =>
+            onChange={(_, val) =>
               csApi.changePartial(stop.id, { position: clamp(val) })
             }
-          >
-            <NumberInputField />
-          </NumberInput>
+          />
         </Flex>
       </FormControl>
-      <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+      <div className={tw`grid grid-cols-4 gap-2`}>
         <Box>
           <ColorComponentSlider
             label="Red"
@@ -121,7 +105,7 @@ function StopEditor({ stop }: StopEditorProps) {
             value={stop.color.r}
             min={0}
             max={1}
-            colorScheme="red"
+            trackColor="red"
             formatHelp={formatComponentHelp}
           />
         </Box>
@@ -133,7 +117,7 @@ function StopEditor({ stop }: StopEditorProps) {
             value={stop.color.g}
             min={0}
             max={1}
-            colorScheme="green"
+            trackColor="green"
             formatHelp={formatComponentHelp}
           />
         </Box>
@@ -145,7 +129,7 @@ function StopEditor({ stop }: StopEditorProps) {
             value={stop.color.b}
             min={0}
             max={1}
-            colorScheme="blue"
+            trackColor="blue"
             formatHelp={formatComponentHelp}
           />
         </Box>
@@ -157,12 +141,11 @@ function StopEditor({ stop }: StopEditorProps) {
             value={stop.color.a}
             min={0}
             max={1}
-            colorScheme="blackAlpha"
             formatHelp={formatComponentHelp}
           />
         </Box>
-      </Grid>
-      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      </div>
+      <div className={tw`grid grid-cols-3 gap-2`}>
         <Box>
           <ColorComponentSlider
             label="Hue"
@@ -198,21 +181,18 @@ function StopEditor({ stop }: StopEditorProps) {
             trackColor={`hsl(0deg, 0%, ${(colorAsHsl.l * 100).toFixed(1)}%)`}
           />
         </Box>
-      </Grid>
-      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      </div>
+      <div className={tw`grid grid-cols-3 gap-2`}>
         <Box>
           <FormLabel>Hex value</FormLabel>
-          <Input
-            maxW="5rem"
-            size="xs"
-            value={colorToHex(stop.color)}
-            onChange={onChangeHex}
-          />
+          <Input value={colorToHex(stop.color)} onChange={onChangeHex} />
         </Box>
-      </Grid>
-      <Divider py={4} />
-      <ButtonGroup pt={4} spacing="6">
-        <Button colorScheme="red" onClick={() => csApi.delete(stop.id)}>
+      </div>
+      <ButtonGroup className={tw`pt-4`} spacing={6}>
+        <Button
+          className={tw`bg-red-400`}
+          onClick={() => csApi.delete(stop.id)}
+        >
           Delete stop
         </Button>
       </ButtonGroup>

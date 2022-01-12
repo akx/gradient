@@ -12,7 +12,7 @@ export function generateSVGGradient(
   return [
     '<linearGradient x1="0%" y1="0%" x2="100%" y2="0%">',
     generateSVGGradientStops(stops, gradientConfig, codegenConfig),
-    '</linearGradient>',
+    "</linearGradient>",
   ].join("\n");
 }
 
@@ -36,7 +36,7 @@ export function generateSVGGradientStops(
       stop.position * 100,
       clamp(codegenConfig.positionPrecision - 2, 0, 10),
     );
-    svgStops.push(`    <stop offset="${posFmt}%" stop-color="${cssColor}" />`)
+    svgStops.push(`    <stop offset="${posFmt}%" stop-color="${cssColor}" />`);
   }
 
   return svgStops.join("\n");

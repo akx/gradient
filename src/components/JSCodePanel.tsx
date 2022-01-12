@@ -4,9 +4,11 @@ import React from "react";
 import { useDebounce } from "react-use";
 import { generateCode } from "../codegen/jsCodegen";
 import { defaultJsConfig } from "../codegen/defaults";
-import { Box, Flex, Textarea } from "@chakra-ui/react";
 import CodegenSettings from "./CodegenSettings";
 import { useGradientConfig } from "../hooks/useGradientConfig";
+import { tw } from "twind";
+import { Textarea } from "../om/forms";
+import { Flex } from "../om/layout";
 
 export default function GradientJSCodePanel() {
   const csApi = useColorStopsAPI();
@@ -29,10 +31,10 @@ export default function GradientJSCodePanel() {
   );
   return (
     <Flex>
-      <Textarea readOnly value={js} rows={15} mt={2} />
-      <Box minW="15em" ml={4}>
+      <Textarea readOnly value={js} rows={15} className={tw`flex-1`} />
+      <div className={tw`ml-4`} style={{ minWidth: "15em" }}>
         <CodegenSettings />
-      </Box>
+      </div>
     </Flex>
   );
 }
