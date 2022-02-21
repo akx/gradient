@@ -1,17 +1,16 @@
-import * as culori from "culori";
-import { ColorspaceConverter } from "./types";
-import { getRgbWithCulori } from "./utils";
+import { convertXyz50ToRgb, convertRgbToXyz50 } from "culori/fn";
 
-const culoriXyz = culori.converter("xyz50");
+import { ColorspaceConverter } from "./types";
+
 const xyzConverter: ColorspaceConverter = {
   id: "xyz50",
   name: "XYZ50",
   fromColor: (c) => {
-    const { x, y, z, alpha } = culoriXyz({ mode: "rgb", ...c });
+    const { x, y, z, alpha } = convertRgbToXyz50(c);
     return [x, y, z, alpha || c.a];
   },
-  toColor: ([x, y, z, alpha]) => {
-    return getRgbWithCulori({ mode: "xyz50", x, y, z, alpha });
+  toColor: ([x, y, z, a]) => {
+    return { ...convertXyz50ToRgb({ x, y, z }), a };
   },
 };
 

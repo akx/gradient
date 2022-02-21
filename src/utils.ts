@@ -1,5 +1,5 @@
 import { Color } from "./types";
-import * as culori from "culori";
+import { convertHslToRgb, convertRgbToHsl } from "culori/fn";
 import { formatNumber } from "./codegen/utils";
 
 export function toCssRgba(color: Color): string {
@@ -25,11 +25,10 @@ export function modifyHSL(
   color: Color,
   mod: Partial<Record<"h" | "s" | "l", number>>,
 ): Color {
-  const colorAsHsl = culori.converter("hsl")({ mode: "rgb", ...color });
+  const colorAsHsl = convertRgbToHsl(color);
   Object.assign(colorAsHsl, mod);
-  const colorAsRgb = culori.converter("rgb")(colorAsHsl);
-
-  return { ...color, r: colorAsRgb.r, g: colorAsRgb.g, b: colorAsRgb.b };
+  const { r, g, b } = convertHslToRgb(colorAsHsl);
+  return { ...color, r, g, b };
 }
 
 export function clamp(n: number, min: number = 0, max: number = 1): number {

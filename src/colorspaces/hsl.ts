@@ -1,17 +1,15 @@
-import * as culori from "culori";
+import { convertHslToRgb, convertRgbToHsl } from "culori/fn";
 import { ColorspaceConverter } from "./types";
-import { getRgbWithCulori } from "./utils";
 
-const culoriHsl = culori.converter("hsl");
 const hslConverter: ColorspaceConverter = {
   id: "hsl",
   name: "HSL [buggy]",
   fromColor: (c) => {
-    const { h, s, l, alpha } = culoriHsl({ mode: "rgb", ...c });
+    const { h, s, l, alpha } = convertRgbToHsl(c);
     return [h || 0, s, l, alpha || c.a];
   },
   toColor: ([h, s, l, alpha]) => {
-    return getRgbWithCulori({ mode: "hsl", h, s, l, alpha });
+    return { ...convertHslToRgb({ h, s, l }), a: alpha };
   },
 };
 

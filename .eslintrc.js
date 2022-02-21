@@ -22,5 +22,6 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "prefer-template": "error",
+    "object-shorthand": "error",
   },
 };

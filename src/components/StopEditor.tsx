@@ -1,6 +1,6 @@
 import React from "react";
 import { ColorStop } from "../types";
-import * as culori from "culori";
+import { convertRgbToHsl } from "culori/fn";
 import { clamp, colorToHex, hexToColor, modifyHSL } from "../utils";
 import ColorComponentSlider from "./ColorComponentSlider";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
@@ -57,7 +57,7 @@ function StopEditor({ stop }: StopEditorProps) {
     },
     [csApi, stop],
   );
-  const colorAsHsl = culori.converter("hsl")({ mode: "rgb", ...stop.color });
+  const colorAsHsl = convertRgbToHsl(stop.color);
   const onChangeHex = React.useCallback(
     (event) => {
       const color = hexToColor(event.target.value, stop.color.a);
