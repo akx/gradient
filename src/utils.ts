@@ -49,11 +49,17 @@ export function hexToColor(hex: string, a: number = 1): Color | null {
   };
 }
 
-export function colorToHex(c: Color): string {
-  const hex = (c: number) =>
-    Math.round(c * 255)
-      .toString(16)
-      .padStart(2, "0")
-      .toUpperCase();
-  return `#${hex(c.r)}${hex(c.g)}${hex(c.b)}`;
+function toHexlet(c: number) {
+  return Math.round(c * 255)
+    .toString(16)
+    .padStart(2, "0")
+    .toUpperCase();
+}
+
+export function colorToRGBHex(c: Color): string {
+  return `#${toHexlet(c.r)}${toHexlet(c.g)}${toHexlet(c.b)}`;
+}
+
+export function colorToRGBAHex(c: Color): string {
+  return `#${toHexlet(c.r)}${toHexlet(c.g)}${toHexlet(c.b)}${toHexlet(c.a)}`;
 }

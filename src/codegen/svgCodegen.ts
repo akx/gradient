@@ -1,7 +1,7 @@
 import { ColorStop, GradientConfig } from "../types";
 import { CodegenConfig } from "./types";
-import { clamp, toCssRgb, toCssRgba } from "../utils";
-import { formatNumber } from "./utils";
+import { clamp } from "../utils";
+import { formatNumber, getCSSColorStringifier } from "./utils";
 import { mangleGradient } from "../gradients/mangle";
 
 export function generateSVGGradient(
@@ -22,22 +22,14 @@ export function generateSVGGradientStops(
   codegenConfig: CodegenConfig,
 ): string {
   const cleanedStops = mangleGradient(stops, gradientConfig);
-  const includeAlpha =
-    codegenConfig.includeAlpha && cleanedStops.some((s) => s.color.a !== 1);
-
-  const svgStops: string[] = [];
-  for (let i = 0; i < cleanedStops.length; i++) {
-    const stop = cleanedStops[i];
-
-    const cssColor = includeAlpha
-      ? toCssRgba(stop.color)
-      : toCssRgb(stop.color);
-    const posFmt = formatNumber(
-      stop.position * 100,
-      clamp(codegenConfig.positionPrecision - 2, 0, 10),
-    );
-    svgStops.push(`    <stop offset="${posFmt}%" stop-color="${cssColor}" />`);
-  }
-
-  return svgStops.join("\n");
+  const toCssColor = getCSSColorStringifier(codegenConfig, cleanedStops);
+  return cleanedStops
+    .map((stop) => {
+      const posFmt = formatNumber(
+        stop.position * 100,
+        clamp(codegenConfig.positionPrecision - 2, 0, 10),
+      );
+      return `    <stop offset="${posFmt}%" stop-color="${toCssColor(stop.color)}" />`;
+    })
+    .join("\n");
 }
