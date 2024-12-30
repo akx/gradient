@@ -8,7 +8,7 @@ export default function CodegenSettings() {
   const codegenConfigAPI = useCodegenConfig();
   const codegenConfig = codegenConfigAPI.object;
   return (
-    <div className={tw`grid grid-rows-3 gap-2`}>
+    <div className={tw`flex flex-col gap-2`}>
       <FormControl>
         <FormLabel>Value precision</FormLabel>
         <NumberInput
@@ -39,6 +39,16 @@ export default function CodegenSettings() {
           }
         >
           Include alpha
+        </Checkbox>
+      </FormControl>
+      <FormControl>
+        <Checkbox
+          isChecked={codegenConfig.hexColors}
+          onChange={(e) =>
+            codegenConfigAPI.change({ hexColors: e.target.checked })
+          }
+        >
+          Use hex colors
         </Checkbox>
       </FormControl>
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { ColorStop } from "../types";
 import { convertRgbToHsl } from "culori/fn";
-import { clamp, colorToHex, hexToColor, modifyHSL } from "../utils";
+import { clamp, colorToRGBHex, hexToColor, modifyHSL } from "../utils";
 import ColorComponentSlider from "./ColorComponentSlider";
 import { useColorStopsAPI } from "../hooks/useColorStopsAPI";
 import { tw } from "twind";
@@ -185,7 +185,7 @@ function StopEditor({ stop }: StopEditorProps) {
       <div className={tw`grid grid-cols-3 gap-2`}>
         <Box>
           <FormLabel>Hex value</FormLabel>
-          <Input value={colorToHex(stop.color)} onChange={onChangeHex} />
+          <Input value={colorToRGBHex(stop.color)} onChange={onChangeHex} />
         </Box>
       </div>
       <ButtonGroup className={tw`pt-4`} spacing={6}>
