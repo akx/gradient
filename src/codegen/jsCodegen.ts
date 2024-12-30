@@ -1,6 +1,8 @@
 import { Color, ColorStop, GradientConfig } from "../types";
-import { format } from "prettier";
-import parser from "prettier/parser-babel";
+import * as prettier from "prettier/standalone"
+import parserBabel from "prettier/plugins/babel";
+import prettierPluginEstree from "prettier/plugins/estree";
+
 import { minify } from "terser";
 import { JsCodegenConfig } from "./types";
 import { formatNumber } from "./utils";
@@ -41,8 +43,9 @@ function formatLerpComponent(a: number, b: number, precision: number): string {
 }
 
 function formatCode(minifiedCode: string) {
-  return format(minifiedCode, {
-    parser: parser.parsers["babel"].parse,
+  return prettier.format(minifiedCode, {
+    parser: "babel",
+    plugins: [parserBabel, prettierPluginEstree],
     printWidth: 120,
   });
 }
@@ -146,7 +149,7 @@ export async function generateCode(
   gradientConfig: GradientConfig,
   codegenConfig: JsCodegenConfig,
 ): Promise<string> {
-  const code = formatCode(
+  const code = await formatCode(
     generateRawCode(stops, gradientConfig, codegenConfig),
   );
   const minifyResult = await minify(code, { mangle: false });
